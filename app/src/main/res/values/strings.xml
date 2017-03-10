@@ -1,3 +1,6 @@
 <resources>
-    <string name="app_name">Quiero ser millonario</string>
+    <string name="app_name">I Want To Be A Millionaire</string>
+    <string name="lbl_play_game">Play game</string>
+    <string name="lbl_scores">Scores</string>
+    <string name="lbl_settings">Settings</string>
 </resources>
