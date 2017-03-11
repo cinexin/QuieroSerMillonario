@@ -3,4 +3,5 @@
     <string name="lbl_play_game">Jugar</string>
     <string name="lbl_scores">Puntuaciones</string>
     <string name="lbl_settings">Preferencias</string>
+    <string name="lbl_credits">Info y Créditos</string>
 </resources>

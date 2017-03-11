@@ -18,18 +18,10 @@
             tools:layout_editor_absoluteY="0dp"
             tools:layout_editor_absoluteX="8dp">
             <Button
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
                 android:id="@+id/btn_play_game"
                 android:drawableLeft="@drawable/ic_play_game"
-                android:layout_gravity="center_vertical"
                 android:text="@string/lbl_play_game"
-
-                android:textSize="20dp"
-
-
-
-
+                style="@style/main_button_style"
                 />
 
         </LinearLayout>
@@ -39,21 +31,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:orientation="horizontal"
-            tools:layout_editor_absoluteY="0dp"
-            tools:layout_editor_absoluteX="8dp">
+            android:orientation="horizontal">
             <Button
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+
                 android:id="@+id/btn_high_scores"
                 android:drawableLeft="@drawable/ic_high_scores"
-                android:layout_gravity="center_vertical"
                 android:text="@string/lbl_scores"
-                android:textSize="20dp"
-
-
-
-
+                style="@style/main_button_style"
                 />
 
         </LinearLayout>
@@ -63,23 +47,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:orientation="horizontal"
-            tools:layout_editor_absoluteY="0dp"
-            tools:layout_editor_absoluteX="8dp">
+            android:orientation="horizontal">
             <Button
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/btn_play"
-                android:drawableLeft="@drawable/ic_play_game"
-                android:labelFor="@+id/lbl_play_game"
+                style="@style/main_button_style"
+                android:id="@+id/btn_settings"
+                android:drawableLeft="@drawable/ic_settings"
                 android:layout_gravity="center_vertical"
-                android:text="@string/lbl_play_game"
-
-                android:textSize="25dp"
-
-
-
-
+                android:text="@string/lbl_settings"
                 />
 
         </LinearLayout>
