@@ -6,6 +6,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 public class MainScreen extends ActionBarActivity {
 
@@ -32,5 +33,16 @@ public class MainScreen extends ActionBarActivity {
                 return super.onOptionsItemSelected(item);
         }
 
+    }
+
+    public void onClickBtnMainMenu(View v) {
+        switch (v.getId()) {
+            case R.id.btn_settings:
+                Intent intent = new Intent(this, SettingsActivity.class);
+                startActivity(intent);
+
+            default:
+                return;
+        }
     }
 }

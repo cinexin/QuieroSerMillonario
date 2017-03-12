@@ -9,4 +9,16 @@
     <string name="author_full_name">Miguel Ángel Guillamón Carrasco</string>
     <string name="author_email">maguillamoncarrasco@gmail.com</string>
     <string name="author_twitter">\@cineexin</string>
+    <string name="lbl_name">Name: </string>
+    <string name="lbl_how_many_jokers">How many times can you ask for help: </string>
+    <string name="lbl_longitude">Longitude: </string>
+    <string name="lbl_latitude">Latitude: </string>
+    <string name="lbl_add_a_friend">Add a friend</string>
+    <string name="hint_your_friends_name">Enter your friend\'s name</string>
+    <string-array name="number_of_jokers_array">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
 </resources>

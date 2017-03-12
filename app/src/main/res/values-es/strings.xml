@@ -4,6 +4,12 @@
     <string name="lbl_scores">Puntuaciones</string>
     <string name="lbl_settings">Preferencias</string>
     <string name="lbl_credits">Info y Créditos</string>
-    <string name="lbl_authours">Autores</string>
+    <string name="lbl_authors">Autores</string>
     <string name="lbl_app_version">Versión</string>
+    <string name="lbl_name">Nombre: </string>
+    <string name="lbl_how_many_jokers">Cuántas veces puedes pedir ayuda: </string>
+    <string name="lbl_longitude">Longitud: </string>
+    <string name="lbl_latitude">Latitud: </string>
+    <string name="lbl_add_a_friend">Añadir amigo</string>
+    <string name="hint_your_friends_name">El nombre de tu amigo</string>
 </resources>
