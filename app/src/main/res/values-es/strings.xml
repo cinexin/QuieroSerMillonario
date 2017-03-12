@@ -15,4 +15,7 @@
     <string name="lbl_delete_high_scores">Borrar puntuaciones</string>
     <string name="lbl_user_high_scores">Tus puntuaciones</string>
     <string name="lbl_friends_high_scores">Puntuaciones de amigos</string>
+    <string name="lbl_call_joker">Comodín de la Llamada</string>
+    <string name="lbl_fifty_percent_joker">Comodín del 50%</string>
+    <string name="lbl_audience_joker">Comodín del público</string>
 </resources>

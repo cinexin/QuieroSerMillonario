@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
+    <item android:id="@+id/btn_call_joker"
+        android:title="@string/lbl_call_joker"
+        android:icon="@drawable/ic_phone_joker"
+        app:showAsAction="always" />
+
+    <item android:id="@+id/btn_fifty_percent_joker"
+        android:title="@string/lbl_fifty_percent_joker"
+        android:icon="@drawable/ic_phone_joker"
+        app:showAsAction="always" />
+    
+
+</menu>
