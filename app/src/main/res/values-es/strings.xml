@@ -13,4 +13,6 @@
     <string name="lbl_add_a_friend">Añadir amigo</string>
     <string name="hint_your_friends_name">El nombre de tu amigo</string>
     <string name="lbl_delete_high_scores">Borrar puntuaciones</string>
+    <string name="lbl_user_high_scores">Tus puntuaciones</string>
+    <string name="lbl_friends_high_scores">Puntuaciones de amigos</string>
 </resources>
