@@ -4,4 +4,6 @@
     <string name="lbl_scores">Puntuaciones</string>
     <string name="lbl_settings">Preferencias</string>
     <string name="lbl_credits">Info y Créditos</string>
+    <string name="lbl_authours">Autores</string>
+    <string name="lbl_app_version">Versión</string>
 </resources>
