@@ -9,8 +9,17 @@
 
     <item android:id="@+id/btn_fifty_percent_joker"
         android:title="@string/lbl_fifty_percent_joker"
-        android:icon="@drawable/ic_phone_joker"
+        android:icon="@drawable/ic_50_percent_joker"
         app:showAsAction="always" />
-    
+
+    <item android:id="@+id/btn_audience_joker"
+        android:title="@string/lbl_audience_joker"
+        android:icon="@drawable/ic_audience_joker"
+        app:showAsAction="always" />
+
+    <item android:id="@+id/btn_quit_game"
+        android:title="@string/lbl_quit_game"
+        android:icon="@drawable/ic_quit"
+        app:showAsAction="ifRoom" />
 
 </menu>

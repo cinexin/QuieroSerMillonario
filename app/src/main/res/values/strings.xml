@@ -27,4 +27,5 @@
     <string name="lbl_call_joker">Call Joker</string>
     <string name="lbl_fifty_percent_joker">50% Joker</string>
     <string name="lbl_audience_joker">Audience Joker</string>
+    <string name="lbl_quit_game">Quit Game</string>
 </resources>

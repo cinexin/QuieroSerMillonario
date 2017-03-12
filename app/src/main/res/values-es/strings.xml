@@ -18,4 +18,5 @@
     <string name="lbl_call_joker">Comodín de la Llamada</string>
     <string name="lbl_fifty_percent_joker">Comodín del 50%</string>
     <string name="lbl_audience_joker">Comodín del público</string>
+    <string name="lbl_quit_game">Salir del juego</string>
 </resources>
