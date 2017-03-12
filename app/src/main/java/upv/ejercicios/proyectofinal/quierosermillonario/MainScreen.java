@@ -36,10 +36,16 @@ public class MainScreen extends ActionBarActivity {
     }
 
     public void onClickBtnMainMenu(View v) {
+        Intent intent;
         switch (v.getId()) {
-            case R.id.btn_settings:
-                Intent intent = new Intent(this, SettingsActivity.class);
+            case R.id.btn_high_scores:
+                intent = new Intent(this, HighScoresActivity.class);
                 startActivity(intent);
+                break;
+            case R.id.btn_settings:
+                intent = new Intent(this, SettingsActivity.class);
+                startActivity(intent);
+                break;
 
             default:
                 return;
