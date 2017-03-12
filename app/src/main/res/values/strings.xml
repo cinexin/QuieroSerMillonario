@@ -21,4 +21,5 @@
         <item>2</item>
         <item>3</item>
     </string-array>
+    <string name="lbl_delete_high_scores">Delete high scores</string>
 </resources>

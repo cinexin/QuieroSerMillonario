@@ -12,4 +12,5 @@
     <string name="lbl_latitude">Latitud: </string>
     <string name="lbl_add_a_friend">Añadir amigo</string>
     <string name="hint_your_friends_name">El nombre de tu amigo</string>
+    <string name="lbl_delete_high_scores">Borrar puntuaciones</string>
 </resources>
