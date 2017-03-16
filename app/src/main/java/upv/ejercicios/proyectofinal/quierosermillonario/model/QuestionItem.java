@@ -1,4 +1,4 @@
-package upv.ejercicios.proyectofinal.quierosermillonario;
+package upv.ejercicios.proyectofinal.quierosermillonario.model;
 
 /**
  * Created by migui on 0012.

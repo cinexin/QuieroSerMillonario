@@ -4,14 +4,13 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.widget.GridView;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import upv.ejercicios.proyectofinal.quierosermillonario.model.QuestionItem;
 
 /**
  * Created by migui on 0012.
@@ -272,10 +271,10 @@ public class PlayGameActivity extends ActionBarActivity {
         // sample - 1st question 4 possible answers
 
         List<String> possibleAnswers =  new ArrayList<>();
-        possibleAnswers.add(0, questionItem.answer1);
-        possibleAnswers.add(1, questionItem.answer2);
-        possibleAnswers.add(2, questionItem.answer3);
-        possibleAnswers.add(3, questionItem.answer4);
+        possibleAnswers.add(0, questionItem.getAnswer1());
+        possibleAnswers.add(1, questionItem.getAnswer2());
+        possibleAnswers.add(2, questionItem.getAnswer3());
+        possibleAnswers.add(3, questionItem.getAnswer4());
 
         this.answersGridView = (GridView) findViewById(R.id.possible_answers_grid_view);
         this.answersGridView.setAdapter(new AnswerItemAdapter(this, possibleAnswers));
