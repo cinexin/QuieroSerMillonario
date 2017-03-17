@@ -11,6 +11,10 @@ public class GameSettings extends Object {
     private float longitude;
     private float latitude;
 
+    public GameSettings() {
+
+    }
+
     public GameSettings(String userName, int numberOfJokers, float longitude, float latitude) {
         this.userName = userName;
         this.numberOfJokers = numberOfJokers;
