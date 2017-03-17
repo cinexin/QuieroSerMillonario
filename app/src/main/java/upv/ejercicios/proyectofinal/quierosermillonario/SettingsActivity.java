@@ -33,7 +33,7 @@ public class SettingsActivity extends ActionBarActivity {
             @Override
             public void onClick(View v) {
                 // TODO: Collect input data and Call GameSettingsService.saveSettings
-                
+
             }
         });
     }
