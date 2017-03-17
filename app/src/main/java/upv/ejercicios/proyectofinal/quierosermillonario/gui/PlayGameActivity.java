@@ -1,4 +1,4 @@
-package upv.ejercicios.proyectofinal.quierosermillonario;
+package upv.ejercicios.proyectofinal.quierosermillonario.gui;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -10,6 +10,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+import upv.ejercicios.proyectofinal.quierosermillonario.R;
 import upv.ejercicios.proyectofinal.quierosermillonario.model.QuestionItem;
 
 /**

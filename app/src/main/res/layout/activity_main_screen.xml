@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@drawable/app_background"
-    tools:context="upv.ejercicios.proyectofinal.quierosermillonario.MainScreen">
+    tools:context="upv.ejercicios.proyectofinal.quierosermillonario.gui.MainScreen">
 
 
         <!-- Play game -->

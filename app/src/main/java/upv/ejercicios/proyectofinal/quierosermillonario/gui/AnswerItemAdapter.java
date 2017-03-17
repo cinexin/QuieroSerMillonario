@@ -1,4 +1,4 @@
-package upv.ejercicios.proyectofinal.quierosermillonario;
+package upv.ejercicios.proyectofinal.quierosermillonario.gui;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -8,6 +8,8 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 
 import java.util.List;
+
+import upv.ejercicios.proyectofinal.quierosermillonario.R;
 
 /**
  * Created by migui on 0013.

@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         >
-        <activity android:name=".MainScreen">
+        <activity android:name=".gui.MainScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -18,35 +18,35 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".CreditsActivity"
-            android:parentActivityName=".MainScreen">
+        <activity android:name=".gui.CreditsActivity"
+            android:parentActivityName=".gui.MainScreen">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainScreen"
+                android:value=".gui.MainScreen"
                 />
         </activity>
 
-        <activity android:name=".SettingsActivity"
-            android:parentActivityName=".MainScreen">
+        <activity android:name=".gui.SettingsActivity"
+            android:parentActivityName=".gui.MainScreen">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainScreen"
+                android:value=".gui.MainScreen"
                 />
         </activity>
 
-        <activity android:name=".HighScoresActivity"
-            android:parentActivityName=".MainScreen">
+        <activity android:name=".gui.HighScoresActivity"
+            android:parentActivityName=".gui.MainScreen">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainScreen"
+                android:value=".gui.MainScreen"
                 />
         </activity>
 
-        <activity android:name=".PlayGameActivity"
-            android:parentActivityName=".MainScreen">
+        <activity android:name=".gui.PlayGameActivity"
+            android:parentActivityName=".gui.MainScreen">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainScreen"/>
+                android:value=".gui.MainScreen"/>
         </activity>
     </application>
 

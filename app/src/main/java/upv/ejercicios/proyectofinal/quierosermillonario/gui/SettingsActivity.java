@@ -1,4 +1,4 @@
-package upv.ejercicios.proyectofinal.quierosermillonario;
+package upv.ejercicios.proyectofinal.quierosermillonario.gui;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -9,6 +9,8 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
+
+import upv.ejercicios.proyectofinal.quierosermillonario.R;
 
 /**
  * Created by migui on 0012.

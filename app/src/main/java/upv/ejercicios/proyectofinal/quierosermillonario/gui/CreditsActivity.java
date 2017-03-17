@@ -1,4 +1,4 @@
-package upv.ejercicios.proyectofinal.quierosermillonario;
+package upv.ejercicios.proyectofinal.quierosermillonario.gui;
 
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBarActivity;
 import android.widget.TextView;
+import upv.ejercicios.proyectofinal.quierosermillonario.R;
 
 import org.w3c.dom.Text;
 
