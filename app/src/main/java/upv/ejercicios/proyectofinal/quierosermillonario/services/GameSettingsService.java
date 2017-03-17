@@ -12,12 +12,12 @@ import upv.ejercicios.proyectofinal.quierosermillonario.model.GameSettings;
 public class GameSettingsService implements SettingsInterface {
 
     @Override
-    public GameSettings getSettings(View view) {
+    public GameSettings getSettings() {
         return null;
     }
 
     @Override
-    public void saveSettings(View view) {
+    public void saveSettings() {
 
     }
 }
