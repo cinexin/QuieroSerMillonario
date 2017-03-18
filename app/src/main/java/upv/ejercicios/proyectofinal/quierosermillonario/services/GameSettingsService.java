@@ -54,6 +54,14 @@ public class GameSettingsService implements SettingsInterface {
 
     }
 
+    public void saveGamePosition(int questionNumber) {
+        SharedPreferences _prefs = context.getApplicationContext().getSharedPreferences(AppConstants.SETTINGS_FILE_NAME, Activity.MODE_PRIVATE);
+        SharedPreferences.Editor _prefsEditor = _prefs.edit();
+
+        _prefsEditor.putInt(AppConstants.SETTINGS_GAME_STATUS_CURRENT_QUESTION_KEY, questionNumber );
+        _prefsEditor.commit();
+    }
+
     public GameSettingsService(Context context) {
         this.context = context;
     }

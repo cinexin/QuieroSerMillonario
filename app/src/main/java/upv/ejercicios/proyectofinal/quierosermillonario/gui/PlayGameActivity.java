@@ -11,7 +11,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import upv.ejercicios.proyectofinal.quierosermillonario.R;
+import upv.ejercicios.proyectofinal.quierosermillonario.interfaces.SettingsInterface;
+import upv.ejercicios.proyectofinal.quierosermillonario.model.GameSettings;
 import upv.ejercicios.proyectofinal.quierosermillonario.model.QuestionItem;
+import upv.ejercicios.proyectofinal.quierosermillonario.services.GameSettingsService;
 
 /**
  * Created by migui on 0012.
@@ -19,6 +22,8 @@ import upv.ejercicios.proyectofinal.quierosermillonario.model.QuestionItem;
 
 public class PlayGameActivity extends ActionBarActivity {
     private GridView answersGridView ;
+    private int currentQuestion;
+    private GameSettings gameSettings;
 
     public List<QuestionItem> generateQuestionItemList() {
         List<QuestionItem> list = new ArrayList<QuestionItem>();
@@ -251,6 +256,33 @@ public class PlayGameActivity extends ActionBarActivity {
 
         return list;
     }
+
+    private void manageAvailableJokers(int numberOfJokers, Menu menu) {
+        switch (numberOfJokers) {
+            case 2:
+                // 2 jokers = we remove audience joker
+                menu.removeItem(R.id.btn_audience_joker);
+                break;
+
+            case 1:
+                // 1 joker = we remove audience and 50% jokers
+                menu.removeItem(R.id.btn_audience_joker);
+                menu.removeItem(R.id.btn_fifty_percent_joker);
+                break;
+
+            case 0:
+                // 0 jokers = we remove all jokers >:)
+                menu.removeItem(R.id.btn_audience_joker);
+                menu.removeItem(R.id.btn_fifty_percent_joker);
+                menu.removeItem(R.id.btn_call_joker);
+                break;
+
+            default:
+                // all jokers are available by default
+                break;
+        }
+    }
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -259,10 +291,17 @@ public class PlayGameActivity extends ActionBarActivity {
 
 
 
-        List<QuestionItem> questionItems = this.generateQuestionItemList();
-        QuestionItem questionItem = questionItems.get(4);
+        GameSettingsService gameSettingsService = new GameSettingsService(getApplicationContext());
+        gameSettings = gameSettingsService.getSettings();
 
-        // sample - 1st question
+        // sample for testing purposes...
+        gameSettings.setCurrentQuestion(7);
+        currentQuestion = gameSettings.getCurrentQuestion();
+
+        List<QuestionItem> questionItems = this.generateQuestionItemList();
+        QuestionItem questionItem = questionItems.get(currentQuestion);
+
+        // sample question
         TextView txtQuestion = (TextView) findViewById(R.id.txt_question);
         txtQuestion.setText(questionItem.getText());
 
@@ -284,6 +323,19 @@ public class PlayGameActivity extends ActionBarActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_play_game_screen, menu);
+        if (this.gameSettings == null) {
+            GameSettingsService gameSettingsService = new GameSettingsService(getApplicationContext());
+            gameSettings = gameSettingsService.getSettings();
+        }
+
+        manageAvailableJokers(gameSettings.getNumberOfJokers(), menu);
         return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    protected void onPause() {
+        GameSettingsService gameSettingsService = new GameSettingsService(getApplicationContext());
+        gameSettingsService.saveGamePosition(currentQuestion);
+        super.onPause();
     }
 }
