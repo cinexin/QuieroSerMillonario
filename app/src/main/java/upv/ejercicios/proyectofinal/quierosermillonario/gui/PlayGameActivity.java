@@ -4,17 +4,23 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
+import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.TextView;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import upv.ejercicios.proyectofinal.quierosermillonario.R;
 import upv.ejercicios.proyectofinal.quierosermillonario.interfaces.SettingsInterface;
+import upv.ejercicios.proyectofinal.quierosermillonario.model.GameScore;
 import upv.ejercicios.proyectofinal.quierosermillonario.model.GameSettings;
 import upv.ejercicios.proyectofinal.quierosermillonario.model.QuestionItem;
+import upv.ejercicios.proyectofinal.quierosermillonario.services.GameScoresService;
 import upv.ejercicios.proyectofinal.quierosermillonario.services.GameSettingsService;
+import upv.ejercicios.proyectofinal.quierosermillonario.utils.Logging;
 
 /**
  * Created by migui on 0012.
@@ -24,6 +30,8 @@ public class PlayGameActivity extends ActionBarActivity {
     private GridView answersGridView ;
     private int currentQuestion;
     private GameSettings gameSettings;
+    private GameScore gameScore;
+    private GameScoresService gameScoresService;
 
     public List<QuestionItem> generateQuestionItemList() {
         List<QuestionItem> list = new ArrayList<QuestionItem>();
@@ -283,30 +291,19 @@ public class PlayGameActivity extends ActionBarActivity {
         }
     }
 
-    @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_play_game);
-
-
-
-
-        GameSettingsService gameSettingsService = new GameSettingsService(getApplicationContext());
-        gameSettings = gameSettingsService.getSettings();
-
-        // sample for testing purposes...
-        gameSettings.setCurrentQuestion(7);
-        currentQuestion = gameSettings.getCurrentQuestion();
+    // TODO: displayCurrentQuestion() implementation
+    private void displayCurrentQuestion() {
 
         List<QuestionItem> questionItems = this.generateQuestionItemList();
-        QuestionItem questionItem = questionItems.get(currentQuestion);
+
+        QuestionItem questionItem = questionItems.get(currentQuestion - 1);
 
         // sample question
         TextView txtQuestion = (TextView) findViewById(R.id.txt_question);
         txtQuestion.setText(questionItem.getText());
 
         TextView txtQuestionNumber = (TextView) findViewById(R.id.txt_question_number) ;
-        txtQuestionNumber.setText(questionItem.getNumber());
+        txtQuestionNumber.setText(String.valueOf(currentQuestion));
 
         // sample - 1st question 4 possible answers
 
@@ -318,6 +315,33 @@ public class PlayGameActivity extends ActionBarActivity {
 
         this.answersGridView = (GridView) findViewById(R.id.possible_answers_grid_view);
         this.answersGridView.setAdapter(new AnswerItemAdapter(this, possibleAnswers));
+
+        TextView txtPlayingFor = (TextView) findViewById(R.id.txt_playing_for);
+        txtPlayingFor.setText(String.valueOf(gameScoresService.getGameScore().getPlayingFor()) );
+    }
+
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_play_game);
+
+        GameSettingsService gameSettingsService = new GameSettingsService(getApplicationContext());
+        gameSettings = gameSettingsService.getSettings();
+
+        // sample for testing purposes...
+        gameSettings.setCurrentQuestion(7);
+        currentQuestion = gameSettings.getCurrentQuestion();
+
+
+
+        gameScore = new GameScore();
+        gameScore.setLastQuestionAnswered(currentQuestion - 1);
+        gameScoresService = new GameScoresService(gameScore);
+        gameScoresService.refereshGameScores();
+
+        displayCurrentQuestion();
+        Logging log = new Logging();
+        log.debug(gameScoresService.getGameScore().toString());
     }
 
     @Override

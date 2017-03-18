@@ -11,6 +11,7 @@ public class GameSettings extends Object {
     private float longitude;
     private float latitude;
     private int currentQuestion = 1;
+    private int[] amountWithQuestionRelationship;
 
     public GameSettings() {
 
