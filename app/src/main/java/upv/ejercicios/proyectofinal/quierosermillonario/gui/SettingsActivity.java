@@ -16,6 +16,7 @@ import upv.ejercicios.proyectofinal.quierosermillonario.R;
 import upv.ejercicios.proyectofinal.quierosermillonario.constants.AppConstants;
 import upv.ejercicios.proyectofinal.quierosermillonario.interfaces.LoggingInterface;
 import upv.ejercicios.proyectofinal.quierosermillonario.model.GameSettings;
+import upv.ejercicios.proyectofinal.quierosermillonario.services.GameSettingsService;
 import upv.ejercicios.proyectofinal.quierosermillonario.utils.Logging;
 import upv.ejercicios.proyectofinal.quierosermillonario.utils.StringUtils;
 
@@ -44,7 +45,7 @@ public class SettingsActivity extends ActionBarActivity {
         float longitude ;
         String longitudeAsString =  ((EditText) findViewById(R.id.txt_longitude)).getText().toString();
         if (!StringUtils.isEmpty( longitudeAsString) ) {
-            logging.debug("Longitude As String: " + longitudeAsString);
+
             try {
                 longitude = Float.valueOf(longitudeAsString);
             } catch (NumberFormatException nfEx) {
@@ -72,6 +73,24 @@ public class SettingsActivity extends ActionBarActivity {
         return  gameSettings;
     }
 
+    private void fillSavedSettings(GameSettings gameSettings) {
+        // DONE: fill fields with saved settings...
+        if (!StringUtils.isEmpty(gameSettings.getUserName())) {
+            EditText txtUserName = (EditText) findViewById(R.id.txt_user_name);
+            txtUserName.setText(gameSettings.getUserName());
+        }
+
+        Spinner numOfJokersSpinner = (Spinner) findViewById(R.id.select_num_of_jokers);
+        numOfJokersSpinner.setSelection(gameSettings.getNumberOfJokers());
+
+        EditText txtLongitude = (EditText) findViewById(R.id.txt_longitude);
+        txtLongitude.setText(Float.toString(gameSettings.getLongitude()));
+
+        EditText txtLatitude = (EditText) findViewById(R.id.txt_latitude);
+        txtLatitude.setText(Float.toString(gameSettings.getLatitude()));
+
+    }
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,13 +104,20 @@ public class SettingsActivity extends ActionBarActivity {
         // Apply the adapter to the spinner
         numOfJokesSpinner.setAdapter(adapter);
 
+        // Retrieve saved settings if already present and show them...
+        GameSettingsService gameSettingsService = new GameSettingsService(getApplicationContext());
+        GameSettings gameSettings =  gameSettingsService.getSettings();
+        if (gameSettings != null)
+            fillSavedSettings(gameSettings);
+
         Button saveSettingsButton = (Button) findViewById(R.id.btn_save_settings);
         saveSettingsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO: Collect input data and Call GameSettingsService.saveSettings
+                // DONE: Collect input data and Call GameSettingsService.saveSettings
                 GameSettings gameSettings = collectInputSettings();
-                
+                GameSettingsService gameSettingsService = new GameSettingsService(getApplicationContext());
+                gameSettingsService.saveSettings(gameSettings);
             }
         });
     }

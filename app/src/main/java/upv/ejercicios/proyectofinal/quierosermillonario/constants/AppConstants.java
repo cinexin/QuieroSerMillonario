@@ -9,7 +9,7 @@ package upv.ejercicios.proyectofinal.quierosermillonario.constants;
 
 public class AppConstants extends Object {
     // Settings global constants (file name + fields keys)
-    public static final String SETTINGS_FILE_NAME = "settings.xml";
+    public static final String SETTINGS_FILE_NAME = "settings";
     public static final String SETTINGS_USERNAME_KEY = "Username";
     public static final String SETTINGS_NUMBER_OF_JOKERS_KEY = "NumberOfJokers";
     public static final String SETTINGS_LOCALIZATION_LONGITUDE_KEY = "Longitude";

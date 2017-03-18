@@ -11,7 +11,7 @@ import upv.ejercicios.proyectofinal.quierosermillonario.model.GameSettings;
 
 public interface SettingsInterface {
 
-    public abstract void saveSettings();
+    public abstract void saveSettings(GameSettings settings);
 
     public abstract GameSettings getSettings();
 
