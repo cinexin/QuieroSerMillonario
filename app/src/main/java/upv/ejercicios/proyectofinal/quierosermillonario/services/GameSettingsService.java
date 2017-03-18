@@ -43,6 +43,10 @@ public class GameSettingsService implements SettingsInterface {
             _prefsEditor.putString(AppConstants.SETTINGS_USERNAME_KEY, "");
         }
 
+        int currentQuestion;
+        if ( (currentQuestion = _prefs.getInt(AppConstants.SETTINGS_GAME_STATUS_CURRENT_QUESTION_KEY, 1)) != 1) {
+            _prefsEditor.putInt(AppConstants.SETTINGS_GAME_STATUS_CURRENT_QUESTION_KEY, currentQuestion);
+        }
         _prefsEditor.putInt(AppConstants.SETTINGS_NUMBER_OF_JOKERS_KEY, settings.getNumberOfJokers());
         _prefsEditor.putFloat(AppConstants.SETTINGS_LOCALIZATION_LONGITUDE_KEY, settings.getLongitude());
         _prefsEditor.putFloat(AppConstants.SETTINGS_LOCALIZATION_LATITUDE_KEY, settings.getLatitude());

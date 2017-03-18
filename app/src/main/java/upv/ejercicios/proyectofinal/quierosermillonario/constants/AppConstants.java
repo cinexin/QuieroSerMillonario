@@ -14,6 +14,7 @@ public class AppConstants extends Object {
     public static final String SETTINGS_NUMBER_OF_JOKERS_KEY = "NumberOfJokers";
     public static final String SETTINGS_LOCALIZATION_LONGITUDE_KEY = "Longitude";
     public static final String SETTINGS_LOCALIZATION_LATITUDE_KEY = "Latitude";
+    public static final String SETTINGS_GAME_STATUS_CURRENT_QUESTION_KEY = "CurrentQuestion";
 
     // Game constants
     public static final int MAX_NUMBER_OF_JOKERS = 3;

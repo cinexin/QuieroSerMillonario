@@ -10,6 +10,7 @@ public class GameSettings extends Object {
     private int numberOfJokers;
     private float longitude;
     private float latitude;
+    private int currentQuestion = 1;
 
     public GameSettings() {
 
@@ -20,6 +21,14 @@ public class GameSettings extends Object {
         this.numberOfJokers = numberOfJokers;
         this.longitude = longitude;
         this.latitude = latitude;
+    }
+
+    public GameSettings(String userName, int numberOfJokers, float longitude, float latitude, int currentQuestion) {
+        this.userName = userName;
+        this.numberOfJokers = numberOfJokers;
+        this.longitude = longitude;
+        this.latitude = latitude;
+        this.currentQuestion = currentQuestion;
     }
 
     public String getUserName() {
@@ -54,6 +63,14 @@ public class GameSettings extends Object {
         this.latitude = latitude;
     }
 
+    public int getCurrentQuestion() {
+        return currentQuestion;
+    }
+
+    public void setCurrentQuestion(int currentQuestion) {
+        this.currentQuestion = currentQuestion;
+    }
+
     @Override
     public String toString() {
         return "Settings{" +
@@ -61,6 +78,7 @@ public class GameSettings extends Object {
                 ", numberOfJokers=" + numberOfJokers +
                 ", longitude=" + longitude +
                 ", latitude=" + latitude +
+                ", currentQuestion = " + currentQuestion +
                 '}';
     }
 }
