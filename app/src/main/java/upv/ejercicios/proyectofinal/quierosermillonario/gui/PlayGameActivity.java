@@ -290,7 +290,7 @@ public class PlayGameActivity extends AppCompatActivity {
         }
     }
 
-    // TODO: displayCurrentQuestion() implementation
+    // DONE: displayCurrentQuestion() implementation
     private void displayCurrentQuestion() {
 
         Logging logging = new Logging();
