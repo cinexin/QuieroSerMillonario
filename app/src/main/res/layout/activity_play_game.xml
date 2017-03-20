@@ -56,7 +56,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:numColumns="1"
-            android:id="@+id/possible_answers_grid_view">
+            android:id="@+id/possible_answers_grid_view"
+        >
 
         </GridView>
     </LinearLayout>

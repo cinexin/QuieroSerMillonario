@@ -10,6 +10,7 @@ import android.widget.Button;
 import java.util.List;
 
 import upv.ejercicios.proyectofinal.quierosermillonario.R;
+import upv.ejercicios.proyectofinal.quierosermillonario.utils.Logging;
 
 /**
  * Created by migui on 0013.
@@ -41,13 +42,15 @@ public class AnswerItemAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        View rowView = convertView;
+    public View getView(final int position, View convertView, ViewGroup parent) {
+        final View rowView ;
 
         if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             rowView = inflater.inflate(R.layout.answer_item,parent, false);
 
+        } else {
+            rowView = convertView;
         }
 
         // Set data into the possible answers view....
@@ -58,4 +61,6 @@ public class AnswerItemAdapter extends BaseAdapter {
 
         return rowView;
     }
+
+
 }

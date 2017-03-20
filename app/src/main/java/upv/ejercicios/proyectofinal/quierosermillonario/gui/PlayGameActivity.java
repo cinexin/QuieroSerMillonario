@@ -2,19 +2,18 @@ package upv.ejercicios.proyectofinal.quierosermillonario.gui;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
-import android.widget.EditText;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.TextView;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import upv.ejercicios.proyectofinal.quierosermillonario.R;
-import upv.ejercicios.proyectofinal.quierosermillonario.interfaces.SettingsInterface;
+import upv.ejercicios.proyectofinal.quierosermillonario.gui.utils.ToastMessage;
 import upv.ejercicios.proyectofinal.quierosermillonario.model.GameScore;
 import upv.ejercicios.proyectofinal.quierosermillonario.model.GameSettings;
 import upv.ejercicios.proyectofinal.quierosermillonario.model.QuestionItem;
@@ -26,7 +25,7 @@ import upv.ejercicios.proyectofinal.quierosermillonario.utils.Logging;
  * Created by migui on 0012.
  */
 
-public class PlayGameActivity extends ActionBarActivity {
+public class PlayGameActivity extends AppCompatActivity {
     private GridView answersGridView ;
     private int currentQuestion;
     private GameSettings gameSettings;
@@ -294,9 +293,13 @@ public class PlayGameActivity extends ActionBarActivity {
     // TODO: displayCurrentQuestion() implementation
     private void displayCurrentQuestion() {
 
+        Logging logging = new Logging();
+        logging.debug("displayCurrentQuestion() method called");
+        logging.debug("GAME SCORE" + gameScoresService.getGameScore().toString());
+
         List<QuestionItem> questionItems = this.generateQuestionItemList();
 
-        QuestionItem questionItem = questionItems.get(currentQuestion - 1);
+        final QuestionItem questionItem = questionItems.get(currentQuestion - 1);
 
         // sample question
         TextView txtQuestion = (TextView) findViewById(R.id.txt_question);
@@ -314,10 +317,36 @@ public class PlayGameActivity extends ActionBarActivity {
         possibleAnswers.add(3, questionItem.getAnswer4());
 
         this.answersGridView = (GridView) findViewById(R.id.possible_answers_grid_view);
-        this.answersGridView.setAdapter(new AnswerItemAdapter(this, possibleAnswers));
+        final AnswerItemAdapter answerItemAdapter =  new AnswerItemAdapter(this, possibleAnswers);
+        this.answersGridView.setAdapter(answerItemAdapter);
+
 
         TextView txtPlayingFor = (TextView) findViewById(R.id.txt_playing_for);
         txtPlayingFor.setText(String.valueOf(gameScoresService.getGameScore().getPlayingFor()) );
+
+        answersGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Logging logging = new Logging();
+
+                // check if it's the correct answer
+                int rightAnswer = Integer.valueOf(questionItem.getRight());
+                if ((position + 1) == rightAnswer ) { // right answer :)
+                    logging.debug("RIGHT ANSWER :-)");
+                    view.setBackgroundColor(getResources().getColor(R.color.rightAnswer));
+                    ToastMessage.rightAnswerMessage(getApplicationContext());
+                    gameScoresService.nextQuestion();
+                    currentQuestion++;
+                    displayCurrentQuestion();
+
+                } else { // wrong answer :(
+                    logging.debug("WRONG ANSWER :-(");
+                    view.setBackgroundColor(getResources().getColor(R.color.wrongAnswer));
+                }
+            }
+        });
+
+
     }
 
     @Override
@@ -329,7 +358,7 @@ public class PlayGameActivity extends ActionBarActivity {
         gameSettings = gameSettingsService.getSettings();
 
         // sample for testing purposes...
-        gameSettings.setCurrentQuestion(7);
+        //gameSettings.setCurrentQuestion(7);
         currentQuestion = gameSettings.getCurrentQuestion();
 
 
@@ -337,10 +366,12 @@ public class PlayGameActivity extends ActionBarActivity {
         gameScore = new GameScore();
         gameScore.setLastQuestionAnswered(currentQuestion - 1);
         gameScoresService = new GameScoresService(gameScore);
-        gameScoresService.refereshGameScores();
-
-        displayCurrentQuestion();
+        gameScoresService.refreshGameScore();
         Logging log = new Logging();
+        log.debug("onCreate()...");
+        log.debug("GAME SETTINGS: " + gameSettingsService.getSettings().toString());
+        displayCurrentQuestion();
+
         log.debug(gameScoresService.getGameScore().toString());
     }
 
@@ -359,7 +390,12 @@ public class PlayGameActivity extends ActionBarActivity {
     @Override
     protected void onPause() {
         GameSettingsService gameSettingsService = new GameSettingsService(getApplicationContext());
+        Logging logger = new Logging();
+        logger.debug("On Pause()....");
+        logger.debug("Saving game position...");
         gameSettingsService.saveGamePosition(currentQuestion);
+        logger.debug("GAME SETTINGS: " + gameSettingsService.getSettings().toString());
         super.onPause();
     }
+
 }

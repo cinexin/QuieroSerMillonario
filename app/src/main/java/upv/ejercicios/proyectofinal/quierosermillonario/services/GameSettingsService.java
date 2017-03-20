@@ -29,6 +29,7 @@ public class GameSettingsService implements SettingsInterface {
         gameSettings.setNumberOfJokers(_prefs.getInt(AppConstants.SETTINGS_NUMBER_OF_JOKERS_KEY, AppConstants.MAX_NUMBER_OF_JOKERS));
         gameSettings.setLongitude(_prefs.getFloat(AppConstants.SETTINGS_LOCALIZATION_LONGITUDE_KEY, 0));
         gameSettings.setLatitude(_prefs.getFloat(AppConstants.SETTINGS_LOCALIZATION_LATITUDE_KEY, 0));
+        gameSettings.setCurrentQuestion(_prefs.getInt(AppConstants.SETTINGS_GAME_STATUS_CURRENT_QUESTION_KEY,1));
         return  gameSettings;
     }
 

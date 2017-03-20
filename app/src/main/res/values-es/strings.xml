@@ -22,4 +22,6 @@
     <string name="lbl_play_for">Jugamos para: </string>
     <string name="lbl_question">Pregunta: </string>
     <string name="lbl_save_settings">Grabar preferencias</string>
+    <string name="msg_correct_answer">Tu respuesta es....CORRECTA!!!</string>
+    <string name="msg_wrong_answer">Tu respuesta es...incorrecta...!! :-(</string>
 </resources>

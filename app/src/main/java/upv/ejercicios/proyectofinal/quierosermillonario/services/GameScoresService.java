@@ -1,9 +1,8 @@
 package upv.ejercicios.proyectofinal.quierosermillonario.services;
 
-import java.util.Map;
-
 import upv.ejercicios.proyectofinal.quierosermillonario.constants.AppConstants;
 import upv.ejercicios.proyectofinal.quierosermillonario.model.GameScore;
+import upv.ejercicios.proyectofinal.quierosermillonario.utils.Logging;
 
 /**
  * Created by migui on 0018.
@@ -25,11 +24,13 @@ public class GameScoresService {
         this.gameScore = gameScore;
     }
 
-    // TODO: refreshGameScores
+    // refreshGameScores
 
-    public void refereshGameScores() {
+    public void refreshGameScore() {
         if (this.gameScore != null) {
-            gameScore.setMoneyAchieved(gameScore.getMoneyAchieved() + AppConstants.QUESTIONS_VALUE[gameScore.getLastQuestionAnswered()]);
+            Logging logging = new Logging();
+            logging.debug("Refresh game scores initial state: " + gameScore.toString());
+            gameScore.setMoneyAchieved(AppConstants.QUESTIONS_VALUE[gameScore.getLastQuestionAnswered()]);
             gameScore.setPlayingFor(AppConstants.QUESTIONS_VALUE[gameScore.getLastQuestionAnswered() + 1]);
             if (gameScore.getLastQuestionAnswered() >= 5 &&
                     gameScore.getLastQuestionAnswered() < 10) {
@@ -39,12 +40,12 @@ public class GameScoresService {
             } else {
                 gameScore.setMoneyEnsured(AppConstants.QUESTIONS_VALUE[0]); // yes: zero :)
             }
-
+            logging.debug("Refresh game scores final state: " + gameScore.toString());
         }
     }
     public void nextQuestion() {
-
-        this.refereshGameScores();
         gameScore.setLastQuestionAnswered(gameScore.getLastQuestionAnswered() + 1);
+        this.refreshGameScore();
+
     }
 }
