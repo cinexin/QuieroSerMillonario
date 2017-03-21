@@ -3,8 +3,6 @@ package upv.ejercicios.proyectofinal.quierosermillonario.services;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.support.v7.app.AppCompatActivity;
-import android.view.View;
 
 import upv.ejercicios.proyectofinal.quierosermillonario.constants.AppConstants;
 import upv.ejercicios.proyectofinal.quierosermillonario.interfaces.SettingsInterface;

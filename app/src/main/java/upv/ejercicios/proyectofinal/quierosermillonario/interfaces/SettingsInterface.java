@@ -1,7 +1,5 @@
 package upv.ejercicios.proyectofinal.quierosermillonario.interfaces;
 
-import android.view.View;
-
 import upv.ejercicios.proyectofinal.quierosermillonario.model.GameSettings;
 
 

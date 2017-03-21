@@ -9,8 +9,12 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.TextView;
 
+import org.xmlpull.v1.XmlPullParserException;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import upv.ejercicios.proyectofinal.quierosermillonario.R;
 import upv.ejercicios.proyectofinal.quierosermillonario.gui.utils.ToastMessage;
@@ -19,6 +23,7 @@ import upv.ejercicios.proyectofinal.quierosermillonario.model.GameSettings;
 import upv.ejercicios.proyectofinal.quierosermillonario.model.QuestionItem;
 import upv.ejercicios.proyectofinal.quierosermillonario.services.GameScoresService;
 import upv.ejercicios.proyectofinal.quierosermillonario.services.GameSettingsService;
+import upv.ejercicios.proyectofinal.quierosermillonario.services.XMLParsingService;
 import upv.ejercicios.proyectofinal.quierosermillonario.utils.Logging;
 
 /**
@@ -31,6 +36,7 @@ public class PlayGameActivity extends AppCompatActivity {
     private GameSettings gameSettings;
     private GameScore gameScore;
     private GameScoresService gameScoresService;
+    private List<QuestionItem> questionItems;
 
     public List<QuestionItem> generateQuestionItemList() {
         List<QuestionItem> list = new ArrayList<QuestionItem>();
@@ -297,7 +303,7 @@ public class PlayGameActivity extends AppCompatActivity {
         logging.debug("displayCurrentQuestion() method called");
         logging.debug("GAME SCORE" + gameScoresService.getGameScore().toString());
 
-        List<QuestionItem> questionItems = this.generateQuestionItemList();
+
 
         final QuestionItem questionItem = questionItems.get(currentQuestion - 1);
 
@@ -354,22 +360,32 @@ public class PlayGameActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play_game);
 
+        // Old hardcoded way of questions population....
+        // questionItems = this.generateQuestionItemList();
+        // Replaced by new population via XML files...
+        Logging log = new Logging();
+        String sysLanguage = Locale.getDefault().getLanguage();
+        log.debug("SYSTEM LANGUAGE: " + sysLanguage);
+        XMLParsingService xmlParsingService = new XMLParsingService(getApplicationContext());
+        try {
+            questionItems = xmlParsingService.parseQuestionsFile(sysLanguage);
+        } catch (IOException | XmlPullParserException xmlParsingEx) {
+            xmlParsingEx.printStackTrace();
+            log.error("Error retrieving / parsing XML Question file.");
+            // TODO: find a smarter way to handle this critical exception
+            return;
+        }
         GameSettingsService gameSettingsService = new GameSettingsService(getApplicationContext());
         gameSettings = gameSettingsService.getSettings();
 
-        // sample for testing purposes...
-        //gameSettings.setCurrentQuestion(7);
         currentQuestion = gameSettings.getCurrentQuestion();
-
-
 
         gameScore = new GameScore();
         gameScore.setLastQuestionAnswered(currentQuestion - 1);
         gameScoresService = new GameScoresService(gameScore);
         gameScoresService.refreshGameScore();
-        Logging log = new Logging();
-        log.debug("onCreate()...");
-        log.debug("GAME SETTINGS: " + gameSettingsService.getSettings().toString());
+
+
         displayCurrentQuestion();
 
         log.debug(gameScoresService.getGameScore().toString());

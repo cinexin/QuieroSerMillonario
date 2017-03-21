@@ -10,7 +10,6 @@ import android.widget.Button;
 import java.util.List;
 
 import upv.ejercicios.proyectofinal.quierosermillonario.R;
-import upv.ejercicios.proyectofinal.quierosermillonario.utils.Logging;
 
 /**
  * Created by migui on 0013.
@@ -43,7 +42,7 @@ public class AnswerItemAdapter extends BaseAdapter {
 
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
-        final View rowView ;
+        View rowView ;
 
         if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);

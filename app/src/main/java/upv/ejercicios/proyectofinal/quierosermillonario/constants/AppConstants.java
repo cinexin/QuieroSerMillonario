@@ -1,9 +1,6 @@
 package upv.ejercicios.proyectofinal.quierosermillonario.constants;
 
 
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  * Created by migui on 0016.
  * This class will contain global App internal Constants
@@ -31,6 +28,22 @@ public class AppConstants extends Object {
     public static final int NUMBER_OF_QUESTIONS = 15;
     public static final int FIRST_MILESTONE = 5;
     public static final int SECOND_MILESTONE = 10;
+
+    // Auxiliary resources locations / names
+    public static final String QUESTIONS_FILE_NAME = "questions";
+    // XML attributes and tags names
+    public static final String XML_TAG_QUESTION = "question";
+    public static final String XML_ATTR_QUESTION_TEXT = "text";
+    public static final String XML_ATTR_QUESTION_NUMBER = "number";
+    public static final String XML_ATTR_ANSWER1 = "answer1";
+    public static final String XML_ATTR_ANSWER2 = "answer2";
+    public static final String XML_ATTR_ANSWER3 = "answer3";
+    public static final String XML_ATTR_ANSWER4 = "answer4";
+    public static final String XML_ATTR_AUDIENCE_ANSWER = "audience";
+    public static final String XML_ATTR_FIFTY1_ANSWER = "fifty1";
+    public static final String XML_ATTR_FIFTY2_ANSWER = "fifty2";
+    public static final String XML_ATTR_PHONE_ANSWER = "phone";
+    public static final String XML_ATTR_RIGHT_ANSWER = "right";
 
 
 

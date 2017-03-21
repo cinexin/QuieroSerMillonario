@@ -1,9 +1,8 @@
 package upv.ejercicios.proyectofinal.quierosermillonario.gui;
 
 import android.content.Intent;
-import android.support.v7.app.ActionBarActivity;
-
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
