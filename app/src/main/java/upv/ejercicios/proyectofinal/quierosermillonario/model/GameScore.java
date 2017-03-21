@@ -90,6 +90,7 @@ public class GameScore {
         this.moneyEnsured = moneyEnsured;
     }
 
+
     @Override
     public String toString() {
         return "GameScore{" +
