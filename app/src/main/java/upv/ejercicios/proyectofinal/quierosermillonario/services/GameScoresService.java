@@ -1,27 +1,42 @@
 package upv.ejercicios.proyectofinal.quierosermillonario.services;
 
+import android.content.Context;
+
 import upv.ejercicios.proyectofinal.quierosermillonario.constants.AppConstants;
+import upv.ejercicios.proyectofinal.quierosermillonario.database.DBService;
+import upv.ejercicios.proyectofinal.quierosermillonario.exception.PersistenceException;
 import upv.ejercicios.proyectofinal.quierosermillonario.model.GameScore;
 import upv.ejercicios.proyectofinal.quierosermillonario.utils.Logging;
 
 /**
  * Created by migui on 0018.
  */
-// TODO
+//
 public class GameScoresService {
 
     private GameScore gameScore;
+    private Context appContext;
 
     public GameScore getGameScore() {
         return gameScore;
     }
 
-    public void setGameScore(GameScore gameScore) {
-        this.gameScore = gameScore;
+    public Context getAppContext() {
+        return appContext;
     }
 
-    public GameScoresService(GameScore gameScore) {
+    public void setAppContext(Context appContext) {
+        this.appContext = appContext;
+    }
+
+    public void setGameScore(GameScore gameScore) {
         this.gameScore = gameScore;
+
+    }
+
+    public GameScoresService(GameScore gameScore, Context appContext) {
+        this.gameScore = gameScore;
+        this.appContext = appContext;
     }
 
     // refreshGameScores
@@ -48,8 +63,19 @@ public class GameScoresService {
         this.refreshGameScore();
 
     }
-    // TODO: Implement...
-    public void saveScore() {
-
+    // DONE: Call databaseService and save our score...
+    public void saveScore() throws PersistenceException{
+        DBService dbService = new DBService(AppConstants.DATABASE_NAME, this.getAppContext(), AppConstants.DATABASE_OPEN_WRITE_MODE);
+        Logging log = new Logging();
+        if (dbService != null && this.gameScore != null) {
+            try {
+                dbService.save(this.gameScore);
+                dbService.closeSession();
+            } catch (PersistenceException persistenceEx) {
+                log.error("Error while persisting score onto database");
+                persistenceEx.printStackTrace();
+                throw persistenceEx;
+            }
+        }
     }
 }

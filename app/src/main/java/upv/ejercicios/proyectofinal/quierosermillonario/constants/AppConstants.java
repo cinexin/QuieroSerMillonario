@@ -45,7 +45,17 @@ public class AppConstants extends Object {
     public static final String XML_ATTR_PHONE_ANSWER = "phone";
     public static final String XML_ATTR_RIGHT_ANSWER = "right";
 
-
+    // Database constants
+    public static final String DATABASE_NAME = "WhoWantsToBeMillionaire.db";
+    public static final int DATABASE_DEFAULT_VERSION = 1;
+    public static final int DATABASE_OPEN_READ_MODE = 1;
+    public static final int DATABASE_OPEN_WRITE_MODE = 2;
+    public static final String DATABASE_SCORES_TABLE = "Score";
+    public static final String DATABASE_DEFAULT_USER_NAME = "anonymous";
+    public static final String DATABASE_USERNAME_FIELD = "name";
+    public static final String DATABASE_SCORE_FIELD = "score";
+    public static final String DATABASE_LONGITUDE_FIELD = "longitude";
+    public static final String DATABASE_LATITUDE_FIELD = "latitude";
 
 
 }

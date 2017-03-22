@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteException;
  * Created by migui on 0021.
  */
 
-public class PersistanceException extends SQLiteException {
+public class PersistenceException extends SQLiteException {
+
 
 }

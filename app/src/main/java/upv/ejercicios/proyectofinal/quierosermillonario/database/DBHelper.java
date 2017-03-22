@@ -4,6 +4,8 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import upv.ejercicios.proyectofinal.quierosermillonario.constants.AppConstants;
+
 /**
  * Created by migui on 0021.
  */
@@ -17,7 +19,7 @@ public class DBHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         String sqlCreateDatabaseStatement ;
-        sqlCreateDatabaseStatement = "CREATE TABLE Scores (id INTEGER autoincrement, name TEXT NOT NULL, " +
+        sqlCreateDatabaseStatement = "CREATE TABLE " + AppConstants.DATABASE_SCORES_TABLE + " (id INTEGER PRIMARY KEY autoincrement, name TEXT NOT NULL, " +
                 "score INTEGER NOT NULL, longitude FLOAT, latitude FLOAT) ";
         db.execSQL(sqlCreateDatabaseStatement);
     }
