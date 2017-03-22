@@ -12,7 +12,8 @@ public interface PersistenceInterface {
 
     public abstract void closeSession() ;
     public abstract void save(Object persistable) throws PersistenceException;
-    public abstract List<Object> getAll(Class entity) throws PersistenceException;
-    public abstract List<Object> getWithCriteria (String criteria, String sortByColumn, Class entity) throws PersistenceException;
+    public abstract List<Object> getAll(String entity) throws PersistenceException;
+    public abstract List<Object> getByField (String fieldName, String fieldValue, String sortByColumn, String entity) throws PersistenceException;
+    public abstract void deleteAllRows(String entity) throws PersistenceException;
 
 }

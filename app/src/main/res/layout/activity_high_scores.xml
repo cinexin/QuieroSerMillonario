@@ -23,19 +23,27 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:id="@+id/user_high_scores_view">
+                <TableLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/user_high_scores_table_view"
+
+                    >
+                </TableLayout>
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:id="@+id/friends_high_scores_view">
-            </LinearLayout>
-            <TableLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/high_scores_table_view">
+                <TableLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/all_high_scores_table_view">
 
-            </TableLayout>
+                </TableLayout>
+            </LinearLayout>
+
         </FrameLayout>
     </LinearLayout>
 </TabHost>
