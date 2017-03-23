@@ -28,6 +28,10 @@ public class AppConstants extends Object {
     public static final int NUMBER_OF_QUESTIONS = 15;
     public static final int FIRST_MILESTONE = 5;
     public static final int SECOND_MILESTONE = 10;
+    // cause of game ending
+    public static final int CONTESTANT_FAILED_QUESTION = 1;
+    public static final int CONTESTANT_ABANDONED_GAME = 2;
+    public static final String DEFAULT_YES_NO_MSG = "Are you sure?";
 
     // Auxiliary resources locations / names
     public static final String QUESTIONS_FILE_NAME = "questions";

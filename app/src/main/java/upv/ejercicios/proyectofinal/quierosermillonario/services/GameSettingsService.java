@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import upv.ejercicios.proyectofinal.quierosermillonario.constants.AppConstants;
 import upv.ejercicios.proyectofinal.quierosermillonario.interfaces.SettingsInterface;
 import upv.ejercicios.proyectofinal.quierosermillonario.model.GameSettings;
+import upv.ejercicios.proyectofinal.quierosermillonario.utils.Logging;
 import upv.ejercicios.proyectofinal.quierosermillonario.utils.StringUtils;
 
 /**
@@ -57,6 +58,9 @@ public class GameSettingsService implements SettingsInterface {
         SharedPreferences _prefs = context.getApplicationContext().getSharedPreferences(AppConstants.SETTINGS_FILE_NAME, Activity.MODE_PRIVATE);
         SharedPreferences.Editor _prefsEditor = _prefs.edit();
 
+
+        Logging logging = new Logging();
+        logging.debug("QUESTION NUMBER: " + questionNumber);
         _prefsEditor.putInt(AppConstants.SETTINGS_GAME_STATUS_CURRENT_QUESTION_KEY, questionNumber );
         _prefsEditor.commit();
     }

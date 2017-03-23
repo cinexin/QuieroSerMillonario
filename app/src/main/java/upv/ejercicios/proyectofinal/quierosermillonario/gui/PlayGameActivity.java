@@ -1,5 +1,6 @@
 package upv.ejercicios.proyectofinal.quierosermillonario.gui;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -18,7 +19,9 @@ import java.util.List;
 import java.util.Locale;
 
 import upv.ejercicios.proyectofinal.quierosermillonario.R;
+import upv.ejercicios.proyectofinal.quierosermillonario.constants.AppConstants;
 import upv.ejercicios.proyectofinal.quierosermillonario.exception.PersistenceException;
+import upv.ejercicios.proyectofinal.quierosermillonario.gui.utils.ModalYesNoMessage;
 import upv.ejercicios.proyectofinal.quierosermillonario.gui.utils.ToastMessage;
 import upv.ejercicios.proyectofinal.quierosermillonario.model.GameScore;
 import upv.ejercicios.proyectofinal.quierosermillonario.model.GameSettings;
@@ -39,7 +42,7 @@ public class PlayGameActivity extends AppCompatActivity {
     private GameScore gameScore;
     private GameScoresService gameScoresService;
     private List<QuestionItem> questionItems;
-
+    private boolean gameFinished = false;
 
 
     private void manageAvailableJokers(int numberOfJokers, Menu menu) {
@@ -115,11 +118,13 @@ public class PlayGameActivity extends AppCompatActivity {
                     ToastMessage.rightAnswerMessage(getApplicationContext());
                     gameScoresService.nextQuestion();
                     currentQuestion++;
+
                     displayCurrentQuestion();
 
                 } else { // wrong answer :(
                     logging.debug("WRONG ANSWER :-(");
                     view.setBackgroundColor(getResources().getColor(R.color.wrongAnswer));
+                    finishGame(AppConstants.CONTESTANT_FAILED_QUESTION);
                 }
             }
         });
@@ -176,21 +181,68 @@ public class PlayGameActivity extends AppCompatActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
-    private void quitGame() {
+    private void updateScoresAndQuitGame() {
+
+
+        GameSettingsService gameSettingsService = new GameSettingsService(getApplicationContext());
+        gameSettingsService.saveGamePosition(1);
+
         try {
             gameScoresService.saveScore();
         } catch (PersistenceException persistEx) {
             persistEx.printStackTrace();
             Logging log = new Logging();
-            log.error("ERROR: Couldn't store score onto database!!");
+            log.error("ERROR: Couldn't store score on database!!");
         }
+
+        gameFinished = true;
+        finish();
     }
+
+    private void finishGame(int cause) {
+
+
+        if (cause == AppConstants.CONTESTANT_FAILED_QUESTION) {
+            if (gameScore != null) {
+                gameScore.setMoneyAchieved(gameScore.getMoneyEnsured());
+                gameScoresService.setGameScore(gameScore);
+                updateScoresAndQuitGame();
+            }
+        }
+        else if (cause == AppConstants.CONTESTANT_ABANDONED_GAME) {
+            DialogInterface.OnClickListener yesNoDialogClickListener = new DialogInterface.OnClickListener(){
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    switch (which) {
+                        case DialogInterface.BUTTON_POSITIVE:
+                            updateScoresAndQuitGame();
+                            break;
+
+                        case DialogInterface.BUTTON_NEGATIVE:
+                            dialog.dismiss();
+                            break;
+
+                        default:
+                            break;
+                    }
+                }
+            };
+
+            ModalYesNoMessage modalMsg = new ModalYesNoMessage(PlayGameActivity.this, R.string.abandon_game_confirmation, yesNoDialogClickListener);
+
+            modalMsg.show();
+        }
+
+
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.btn_quit_game:
-                quitGame();
+                finishGame(AppConstants.CONTESTANT_ABANDONED_GAME);
                 return true;
+
 
 
             default:
@@ -205,7 +257,8 @@ public class PlayGameActivity extends AppCompatActivity {
         Logging logger = new Logging();
         logger.debug("On Pause()....");
         logger.debug("Saving game position...");
-        gameSettingsService.saveGamePosition(currentQuestion);
+        if (!gameFinished)
+            gameSettingsService.saveGamePosition(currentQuestion);
         logger.debug("GAME SETTINGS: " + gameSettingsService.getSettings().toString());
         super.onPause();
     }
