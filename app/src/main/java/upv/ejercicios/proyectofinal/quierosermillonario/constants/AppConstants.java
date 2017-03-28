@@ -61,5 +61,13 @@ public class AppConstants extends Object {
     public static final String DATABASE_LONGITUDE_FIELD = "longitude";
     public static final String DATABASE_LATITUDE_FIELD = "latitude";
 
+    // Network connection constants
+    public static final int CONNECTION_TYPE_3G = 1;
+    public static final int CONNECTION_TYPE_WIFI = 2;
+
+    public static final String HTTP_POST_METHOD = "POST";
+    public static final String HTTP_GET_METHOD = "GET";
+    public static final String HTTP_PUT_METHOD = "PUT";
+    public static final String HTTP_DELETE_METHOD = "DELETE";
 
 }

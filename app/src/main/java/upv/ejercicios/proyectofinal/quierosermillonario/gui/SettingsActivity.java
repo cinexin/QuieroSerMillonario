@@ -117,5 +117,13 @@ public class SettingsActivity extends ActionBarActivity {
                 gameSettingsService.saveSettings(gameSettings);
             }
         });
+
+        Button addFriendButton = (Button) findViewById(R.id.btn_add_friend);
+        addFriendButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
     }
 }

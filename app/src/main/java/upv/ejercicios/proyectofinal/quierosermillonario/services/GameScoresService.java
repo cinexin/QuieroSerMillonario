@@ -55,10 +55,10 @@ public class GameScoresService {
             logging.debug("Refresh game scores initial state: " + gameScore.toString());
             gameScore.setMoneyAchieved(AppConstants.QUESTIONS_VALUE[gameScore.getLastQuestionAnswered()]);
             gameScore.setPlayingFor(AppConstants.QUESTIONS_VALUE[gameScore.getLastQuestionAnswered() + 1]);
-            if (gameScore.getLastQuestionAnswered() >= 5 &&
-                    gameScore.getLastQuestionAnswered() < 10) {
+            if (gameScore.getLastQuestionAnswered() >= AppConstants.FIRST_MILESTONE &&
+                    gameScore.getLastQuestionAnswered() < AppConstants.SECOND_MILESTONE) {
                 gameScore.setMoneyEnsured(AppConstants.QUESTIONS_VALUE[AppConstants.FIRST_MILESTONE]);
-            } else if (gameScore.getLastQuestionAnswered() >= 10){
+            } else if (gameScore.getLastQuestionAnswered() >= AppConstants.SECOND_MILESTONE){
                 gameScore.setMoneyEnsured(AppConstants.QUESTIONS_VALUE[AppConstants.SECOND_MILESTONE]);
             } else {
                 gameScore.setMoneyEnsured(AppConstants.QUESTIONS_VALUE[0]); // yes: zero :)
