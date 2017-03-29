@@ -36,4 +36,10 @@
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="abandon_game_confirmation">Are you sure you want to abandon game? /:)</string>
+    <string name="lbl_status">Status...</string>
+    <string name="msg_adding_friend">Adding friend...</string>
+    <string name="msg_friend_added_successfully">Friend successfully added</string>
+    <string name="msg_friend_add_error">There was some error when adding friend!</string>
+    <string name="msg_high_scores_remote_record">Record scored remotely</string>
+    <string name="msg_high_scores_remote_record_error">There was some error when trying to register your score remotely!</string>
 </resources>

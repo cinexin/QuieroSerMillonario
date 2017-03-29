@@ -70,4 +70,14 @@ public class AppConstants extends Object {
     public static final String HTTP_PUT_METHOD = "PUT";
     public static final String HTTP_DELETE_METHOD = "DELETE";
 
+    public static final String URL_ADD_NEW_FRIEND = "https://wwtbam-1076.appspot.com/_ah/api/friends/v1/add";
+    public static final String URL_REGISTER_HIGH_SCORE = "https://wwtbam-1076.appspot.com/_ah/api/highscores/v1/new";
+    public static final String URL_USER_NAME_PARAMETER = "name";
+    public static final String URL_USER_FRIEND_NAME_PARAMETER = "friend_name";
+    public static final String URL_USER_SCORE_PARAMETER = "score";
+    public static final String URL_USER_LONGITUDE_PARAMETER = "longitude";
+    public static final String URL_USER_LATITUDE_PARAMETER = "latitude";
+
+
+
 }

@@ -5,4 +5,5 @@
     <color name="colorAccent">#25A82B</color>
     <color name="rightAnswer">#25A82B</color>
     <color name="wrongAnswer">#FF0000</color>
+    <color name="errorGeneric">#FF0000</color>
 </resources>

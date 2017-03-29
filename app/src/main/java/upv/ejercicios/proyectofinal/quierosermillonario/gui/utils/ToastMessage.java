@@ -17,4 +17,8 @@ public class ToastMessage {
         toast.show();
     }
 
+    public static void infoMessage(Context context, String msg) {
+        Toast toast = Toast.makeText(context, msg, Toast.LENGTH_SHORT);
+        toast.show();
+    }
 }

@@ -65,15 +65,15 @@ public class HttpUtils {
         return connectionOK;
     }
 
-    public void postRequest(String baseURL, List<NameValuePair> pairs) throws IOException {
+    public void postRequest(String baseURL, String httpMethod, List<NameValuePair> pairs) throws IOException {
         Logging logging = new Logging();
-        String completeURL = baseURL + "?" + URLEncodedUtils.format(pairs, "uft-8");
+        String completeURL = baseURL + "?" + URLEncodedUtils.format(pairs, "utf-8");
 
 
         URL url = new URL(completeURL);
         try {
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestMethod(AppConstants.HTTP_POST_METHOD);
+            conn.setRequestMethod(httpMethod);
             conn.setDoOutput(true);
             BufferedWriter writer = new BufferedWriter( new OutputStreamWriter(conn.getOutputStream(), "UTF-8"));
             writer.write(completeURL);

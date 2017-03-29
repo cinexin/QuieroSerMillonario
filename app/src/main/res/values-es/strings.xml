@@ -27,4 +27,10 @@
     <string name="yes">Sí</string>
     <string name="no">No</string>
     <string name="abandon_game_confirmation">¿Estás seguro que quieres abandonar el juego? /:)</string>
+    <string name="lbl_status">Estado...</string>
+    <string name="msg_adding_friend">Añadiendo amigo...</string>
+    <string name="msg_friend_added_successfully">Amigo añadido</string>
+    <string name="msg_friend_add_error">¡Hubo un error al añadir amigo</string>
+    <string name="msg_high_scores_remote_record">Puntuación registrada</string>
+    <string name="msg_high_scores_remote_record_error">¡Hubo un error al tratar de registrar tu puntuación remotamente!</string>
 </resources>

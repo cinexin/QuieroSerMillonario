@@ -1,18 +1,28 @@
 package upv.ejercicios.proyectofinal.quierosermillonario.gui;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
+
+import java.io.IOException;
 
 import upv.ejercicios.proyectofinal.quierosermillonario.R;
 import upv.ejercicios.proyectofinal.quierosermillonario.constants.AppConstants;
+import upv.ejercicios.proyectofinal.quierosermillonario.gui.utils.ToastMessage;
 import upv.ejercicios.proyectofinal.quierosermillonario.interfaces.LoggingInterface;
+import upv.ejercicios.proyectofinal.quierosermillonario.model.Friend;
 import upv.ejercicios.proyectofinal.quierosermillonario.model.GameSettings;
+import upv.ejercicios.proyectofinal.quierosermillonario.services.FriendService;
 import upv.ejercicios.proyectofinal.quierosermillonario.services.GameSettingsService;
 import upv.ejercicios.proyectofinal.quierosermillonario.utils.Logging;
 import upv.ejercicios.proyectofinal.quierosermillonario.utils.StringUtils;
@@ -23,10 +33,12 @@ import upv.ejercicios.proyectofinal.quierosermillonario.utils.StringUtils;
 
 public class SettingsActivity extends ActionBarActivity {
 
+
     private GameSettings collectInputSettings() {
         GameSettings gameSettings = new GameSettings();
 
         LoggingInterface logging = new Logging();
+
 
         String userName = ((EditText) findViewById(R.id.txt_user_name)).getText().toString();
         if (userName != null)
@@ -122,8 +134,57 @@ public class SettingsActivity extends ActionBarActivity {
         addFriendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String userName =  ((EditText) findViewById(R.id.txt_user_name)).getText().toString();
+                String friendName = ((EditText) findViewById(R.id.txt_add_friend_name)).getText().toString();
 
+                if (!StringUtils.isEmpty(userName) && !StringUtils.isEmpty(friendName)) {
+                    Friend friend = new Friend(userName, friendName);
+                    new AddFriendTask().execute(friend);
+                }
             }
         });
+    }
+
+    private class AddFriendTask extends AsyncTask<Friend, Void, Friend> {
+
+        @Override
+        protected Friend doInBackground(Friend... params) {
+            Friend friend = params[0];
+            Log.d("[DEBUG]", friend.toString());
+
+            FriendService friendService = new FriendService(getApplicationContext());
+
+            try {
+                friendService.addFriend(friend);
+            } catch (IOException ioEx) {
+                ioEx.printStackTrace();
+                Log.e("[ERROR]", "Error adding friend: " + ioEx.getMessage());
+                return null;
+            }
+            return friend;
+        }
+
+        @Override
+        protected void onProgressUpdate(Void... values) {
+            TextView statusText = (TextView) findViewById(R.id.txt_friend_add_status);
+            statusText.setText(getResources().getString(R.string.msg_adding_friend));
+            ToastMessage.infoMessage(getApplicationContext(), getResources().getString(R.string.msg_adding_friend));
+        }
+
+        @Override
+        protected void onPostExecute(Friend friend) {
+            super.onPostExecute(friend);
+            TextView statusText = (TextView) findViewById(R.id.txt_friend_add_status);
+            if (friend != null) {
+                ToastMessage.infoMessage(getApplicationContext(), getResources().getString(R.string.msg_friend_added_successfully));
+                statusText.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+                statusText.setText(getResources().getString(R.string.msg_friend_added_successfully) + ": " + friend.getFriendName());
+            } else {
+                statusText.setBackgroundColor(getResources().getColor(R.color.errorGeneric));
+                statusText.setText(getResources().getString(R.string.msg_friend_add_error));
+            }
+
+            Log.d("[DEBUG]", "Friend added");
+        }
     }
 }

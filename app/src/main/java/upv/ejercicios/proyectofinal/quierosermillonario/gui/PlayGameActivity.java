@@ -1,6 +1,7 @@
 package upv.ejercicios.proyectofinal.quierosermillonario.gui;
 
 import android.content.DialogInterface;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -182,17 +183,18 @@ public class PlayGameActivity extends AppCompatActivity {
     }
 
     private void updateScoresAndQuitGame() {
-
+        Logging log = new Logging();
 
         GameSettingsService gameSettingsService = new GameSettingsService(getApplicationContext());
         gameSettingsService.saveGamePosition(1);
 
         try {
-            gameScoresService.saveScore();
+            gameScoresService.saveScore(); // register local score
+            // TODO: Perform remote high score registration on a separate thread....
+            new SaveRemoteHighScoresTask().execute(gameScoresService);
         } catch (PersistenceException persistEx) {
             persistEx.printStackTrace();
-            Logging log = new Logging();
-            log.error("ERROR: Couldn't store score on database!!");
+            log.error("ERROR: Couldn't store score on local database!!");
         }
 
         gameFinished = true;
@@ -243,8 +245,6 @@ public class PlayGameActivity extends AppCompatActivity {
                 finishGame(AppConstants.CONTESTANT_ABANDONED_GAME);
                 return true;
 
-
-
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -263,4 +263,34 @@ public class PlayGameActivity extends AppCompatActivity {
         super.onPause();
     }
 
+    private class SaveRemoteHighScoresTask extends AsyncTask<GameScoresService, Void, Boolean> {
+
+        @Override
+        protected Boolean doInBackground(GameScoresService... params) {
+            Boolean ok ;
+            Logging logging = new Logging();
+            GameScoresService scoresService = params[0];
+            try {
+                logging.debug("Calling save remote High Score remotely...");
+                scoresService.saveHighScore(); // register remote high score
+            } catch (IOException ioEx) {
+                logging.error("There was an error while trying to register high score remotely!");
+                ioEx.printStackTrace();
+                ok = Boolean.FALSE;
+                return ok;
+            }
+            ok = Boolean.TRUE;
+            return ok;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean savedSuccessfully) {
+            super.onPostExecute(savedSuccessfully);
+            if (!savedSuccessfully) {
+                ToastMessage.infoMessage(getApplicationContext(), getResources().getString(R.string.msg_high_scores_remote_record_error));
+            } else {
+                ToastMessage.infoMessage(getApplicationContext(), getResources().getString(R.string.msg_high_scores_remote_record));
+            }
+        }
+    }
 }
