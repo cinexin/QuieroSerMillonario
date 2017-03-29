@@ -8,8 +8,12 @@ import android.util.Log;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.utils.URLEncodedUtils;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -67,17 +71,31 @@ public class HttpUtils {
 
     public void postRequest(String baseURL, String httpMethod, List<NameValuePair> pairs) throws IOException {
         Logging logging = new Logging();
-        String completeURL = baseURL + "?" + URLEncodedUtils.format(pairs, "utf-8");
+        String completeURL = baseURL ;//+ "?" + URLEncodedUtils.format(pairs, "UTF-8");
 
+        if (!checkInternetConnection()) {
+            logging.error("NO INTERNET CONNECTION AVAILABLE!!");
+            throw new IOException("No internet connection available");
+        }
 
+        logging.debug("Connecting via HTTP to: " + completeURL);
+        for (int i= 0; i< pairs.size() ; i++){
+            logging.debug("Pair: " + pairs.get(i).toString());
+        }
         URL url = new URL(completeURL);
         try {
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod(httpMethod);
             conn.setDoOutput(true);
             BufferedWriter writer = new BufferedWriter( new OutputStreamWriter(conn.getOutputStream(), "UTF-8"));
-            writer.write(completeURL);
+            writer.write(URLEncodedUtils.format(pairs, "UTF-8"));
+            writer.flush();
             writer.close();
+            logging.debug("RESPONSE CODE: " + conn.getResponseCode());
+            /*BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream())) ;
+            reader.readLine();*/
+
+
 
         } catch (IOException ioEx) {
             logging.error(this.getClass().getName() + ". exception while performing postRequest: " + ioEx.getMessage() );
