@@ -13,7 +13,7 @@ import upv.ejercicios.proyectofinal.quierosermillonario.R;
 public class ToastMessage {
 
     public static void rightAnswerMessage(Context context) {
-        Toast toast = Toast.makeText(context, context.getResources().getString(R.string.msg_correct_answer), Toast.LENGTH_LONG);
+        Toast toast = Toast.makeText(context, context.getResources().getString(R.string.msg_correct_answer), Toast.LENGTH_SHORT);
         toast.show();
     }
 
