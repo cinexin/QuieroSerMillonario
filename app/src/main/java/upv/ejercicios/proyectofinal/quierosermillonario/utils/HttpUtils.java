@@ -79,9 +79,7 @@ public class HttpUtils {
         }
 
         logging.debug("Connecting via HTTP to: " + completeURL);
-        for (int i= 0; i< pairs.size() ; i++){
-            logging.debug("Pair: " + pairs.get(i).toString());
-        }
+
         URL url = new URL(completeURL);
         try {
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -92,8 +90,6 @@ public class HttpUtils {
             writer.flush();
             writer.close();
             logging.debug("RESPONSE CODE: " + conn.getResponseCode());
-            /*BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream())) ;
-            reader.readLine();*/
 
 
 
