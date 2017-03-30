@@ -69,7 +69,9 @@ public class HttpUtils {
         return connectionOK;
     }
 
-    public void postRequest(String baseURL, String httpMethod, List<NameValuePair> pairs) throws IOException {
+
+    public String postRequest(String baseURL, String httpMethod, List<NameValuePair> pairs, boolean waitForAResponse) throws IOException {
+        String response = null;
         Logging logging = new Logging();
         String completeURL = baseURL ;//+ "?" + URLEncodedUtils.format(pairs, "UTF-8");
 
@@ -97,7 +99,10 @@ public class HttpUtils {
             logging.error(this.getClass().getName() + ". exception while performing postRequest: " + ioEx.getMessage() );
             throw ioEx;
         }
-
+        if (waitForAResponse) {
+            // get a response from the server...
+        }
+        return response;
     }
 
     public boolean checkInternetConnection() {

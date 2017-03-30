@@ -117,7 +117,7 @@ public class GameScoresService {
 
         try {
             logging.debug("CALLING URL: " + AppConstants.URL_REGISTER_HIGH_SCORE + " with Score: " + this.getGameScore().toString());
-            httpUtils.postRequest(AppConstants.URL_REGISTER_HIGH_SCORE, AppConstants.HTTP_PUT_METHOD, saveHighScoreParams);
+            httpUtils.postRequest(AppConstants.URL_REGISTER_HIGH_SCORE, AppConstants.HTTP_PUT_METHOD, saveHighScoreParams, false);
         } catch (IOException ioEx) {
             logging.error(getClass().getName() + ":" + "Error while trying to register remote High Scores. " + ioEx.getMessage());
             throw ioEx;

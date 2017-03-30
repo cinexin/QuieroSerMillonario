@@ -41,7 +41,7 @@ public class FriendService implements FriendInterface {
         friendUrlParameters.add(new BasicNameValuePair(AppConstants.URL_USER_NAME_PARAMETER,friend.getUserName()));
         friendUrlParameters.add(new BasicNameValuePair(AppConstants.URL_USER_FRIEND_NAME_PARAMETER,friend.getFriendName()));
         try {
-            httpUtils.postRequest(AppConstants.URL_ADD_NEW_FRIEND, AppConstants.HTTP_POST_METHOD , friendUrlParameters);
+            httpUtils.postRequest(AppConstants.URL_ADD_NEW_FRIEND, AppConstants.HTTP_POST_METHOD , friendUrlParameters, false);
         } catch (IOException ioEx) {
             logging.error(this.getClass().getName() + ". I/O Exception: " + ioEx.getMessage());
             throw ioEx;
