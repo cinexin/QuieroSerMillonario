@@ -2,17 +2,24 @@ package upv.ejercicios.proyectofinal.quierosermillonario.services;
 
 import android.content.Context;
 
+import com.google.gson.Gson;
+
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import upv.ejercicios.proyectofinal.quierosermillonario.constants.AppConstants;
 import upv.ejercicios.proyectofinal.quierosermillonario.database.DBService;
 import upv.ejercicios.proyectofinal.quierosermillonario.exception.PersistenceException;
 import upv.ejercicios.proyectofinal.quierosermillonario.model.GameScore;
+import upv.ejercicios.proyectofinal.quierosermillonario.model.json.HighScoreList;
+import upv.ejercicios.proyectofinal.quierosermillonario.model.json.HighScoreRecord;
 import upv.ejercicios.proyectofinal.quierosermillonario.utils.HttpUtils;
 import upv.ejercicios.proyectofinal.quierosermillonario.utils.Logging;
 import upv.ejercicios.proyectofinal.quierosermillonario.utils.StringUtils;
@@ -171,6 +178,41 @@ public class GameScoresService {
         return (List<GameScore>) (List<?>) gameScores;
     }
 
+    // DONE: Implement (do the remote WS-REST call and parse the results)
+    public List<GameScore> getRemoteHighScores(String userName) throws IOException, JSONException{
+        List<GameScore> gameScores = new ArrayList<GameScore>();
+        Logging logging = new Logging();
+
+        if (this.getAppContext() == null) {
+            String errMsg = getClass().getName() + ". Context is null, please initialize properly the class first";
+            logging.error(errMsg);
+            throw new IOException(errMsg);
+        }
+
+        HttpUtils httpUtils = new HttpUtils(this.getAppContext());
+        List<NameValuePair> requestParams = new ArrayList<>();
+        requestParams.add(new BasicNameValuePair(AppConstants.URL_USER_NAME_PARAMETER, userName));
+        try {
+            String response = httpUtils.postRequest(AppConstants.URL_GET_HIGH_SCORES, AppConstants.HTTP_GET_METHOD, requestParams, true);
+            logging.debug(getClass().getName() + ": Response from the server (plain): " + response);
+            Gson gson = new Gson();
+            JSONObject jsonObject = new JSONObject(response);
+            HighScoreList highScoreList = gson.fromJson(jsonObject.toString(), HighScoreList.class);
+            List<HighScoreRecord> jsonHighScores = highScoreList.getScores();
+            Collections.sort(jsonHighScores);
+            gameScores = fromHighScoreJSONListToGameScoreList(jsonHighScores);
+            Collections.reverse(gameScores); // we want descending order to be displayed
+        } catch (IOException ioEx) {
+            logging.error(this.getClass().getName() + ". I/O Exception: " + ioEx.getMessage());
+            throw ioEx;
+        } catch (JSONException jsonEx) {
+            logging.error(this.getClass().getName() + ". error while parsing JSON response from server. " + jsonEx.getMessage());
+            throw jsonEx;
+        }
+
+        return gameScores;
+
+    }
     // scores clearing functionality
     public void clearScores() throws PersistenceException {
         DBService dbService = new DBService(AppConstants.DATABASE_NAME, this.getAppContext(), AppConstants.DATABASE_OPEN_WRITE_MODE);
@@ -186,5 +228,30 @@ public class GameScoresService {
         }
 
 
+    }
+
+    /*
+        This is an auxiliary method to convert a List of HighScoreRecord (specific class to handle JSON response) to:
+        GameScore (our standard model class)
+     */
+    private List<GameScore> fromHighScoreJSONListToGameScoreList(List<HighScoreRecord> jsonHighScoreList) {
+        List<GameScore> gameScoreList = new ArrayList<>();
+
+        for (HighScoreRecord highScore : jsonHighScoreList) {
+            GameScore gameScore = new GameScore();
+
+            if (!StringUtils.isEmpty(highScore.getName()))
+                gameScore.setUserName(highScore.getName());
+            if (!StringUtils.isEmpty(highScore.getScoring()))
+                gameScore.setMoneyAchieved(Integer.valueOf(highScore.getScoring()).intValue());
+            if (!StringUtils.isEmpty(highScore.getLongitude()))
+                gameScore.setLongitude(Float.valueOf(highScore.getLongitude()).floatValue());
+            if (!StringUtils.isEmpty(highScore.getLatitude()))
+                gameScore.setLatitude(Float.valueOf(highScore.getLatitude()).floatValue());
+
+            gameScoreList.add(gameScore);
+        }
+
+        return gameScoreList;
     }
 }

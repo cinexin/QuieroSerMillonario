@@ -1,9 +1,11 @@
 package upv.ejercicios.proyectofinal.quierosermillonario.gui;
 
 import android.content.PeriodicSync;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -12,6 +14,9 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import org.json.JSONException;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,6 +27,7 @@ import upv.ejercicios.proyectofinal.quierosermillonario.model.GameSettings;
 import upv.ejercicios.proyectofinal.quierosermillonario.services.GameScoresService;
 import upv.ejercicios.proyectofinal.quierosermillonario.services.GameSettingsService;
 import upv.ejercicios.proyectofinal.quierosermillonario.utils.Logging;
+import upv.ejercicios.proyectofinal.quierosermillonario.utils.StringUtils;
 
 /**
  * Created by migui on 0012.
@@ -42,7 +48,8 @@ public class HighScoresActivity extends ActionBarActivity {
         List<GameScore> scores = new ArrayList<>();
         try {
             if (all) {
-                scores = gameScoresService.getAllScores();
+                // DONE: do it on a separate thread (it implies HTTP-WS REST service call)
+                new RemoteHighScoresTask().execute(this.userName);
             } else {
                 scores = gameScoresService.getUserScores(this.userName);
             }
@@ -51,23 +58,27 @@ public class HighScoresActivity extends ActionBarActivity {
         }
 
         // display them on the corresponding scores table...
-        TableLayout highScoresTable = (TableLayout) findViewById(R.id.user_high_scores_table_view);
-        int positionInTheRanking = 1;
-        for (GameScore score: scores) {
+        /*
+            display only user high scores...
+            friend's high scores are displayed on a separate task since it implies HTTP communication
+          */
+        if (!all) {
+            TableLayout highScoresTable = (TableLayout) findViewById(R.id.user_high_scores_table_view);
+            int positionInTheRanking = 1;
+            for (GameScore score : scores) {
 
-            String textRow = String.valueOf(positionInTheRanking) + " - " +
-                    score.getUserName() + " | " + score.getMoneyAchieved() + " | "
-                    + score.getLongitude() + " " + score.getLatitude();
-            TableRow tableRow = new TableRow(this);
-            TextView textView = new TextView(this);
-            textView.setText(textRow);
-            //textView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-            textView.setTextSize(getResources().getDimension(R.dimen.scores_list_text_size));
-            tableRow.addView(textView);
-            highScoresTable.addView(tableRow);
-            positionInTheRanking++;
-
-
+                String textRow = String.valueOf(positionInTheRanking) + " - " +
+                        score.getUserName() + " | " + score.getMoneyAchieved() + " | "
+                        + score.getLongitude() + " " + score.getLatitude();
+                TableRow tableRow = new TableRow(this);
+                TextView textView = new TextView(this);
+                textView.setText(textRow);
+                //textView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+                textView.setTextSize(getResources().getDimension(R.dimen.scores_list_text_size));
+                tableRow.addView(textView);
+                highScoresTable.addView(tableRow);
+                positionInTheRanking++;
+            }
         }
 
 
@@ -112,7 +123,7 @@ public class HighScoresActivity extends ActionBarActivity {
         userName = gameSettings.getUserName();
 
         fillHighScoresTable(false);
-
+        fillHighScoresTable(true);
 
     }
 
@@ -135,5 +146,30 @@ public class HighScoresActivity extends ActionBarActivity {
                 return super.onOptionsItemSelected(item);
         }
 
+    }
+
+    private class RemoteHighScoresTask extends AsyncTask<String, Void, List<GameScore>> {
+        @Override
+        protected List<GameScore> doInBackground(String... params) {
+            Logging logging = new Logging();
+            String userName = params[0];
+            List<GameScore> gameScoreList = null;
+
+            if (!StringUtils.isEmpty(userName)) {
+                GameScoresService scoresService = new GameScoresService(getApplicationContext());
+                try {
+                    gameScoreList = scoresService.getRemoteHighScores(userName);
+                } catch (IOException | JSONException ex) {
+                    ex.printStackTrace();
+                    logging.error("Error fetching remote High Scores: " + ex.getMessage());
+                    return null;
+                }
+            }
+
+            for (GameScore gScore:gameScoreList) {
+                logging.debug("Remote High Scores Task -> gameScore: " + gScore.toString());
+            }
+            return gameScoreList;
+        }
     }
 }

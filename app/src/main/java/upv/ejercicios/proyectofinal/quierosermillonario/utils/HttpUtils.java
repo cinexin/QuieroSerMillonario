@@ -73,8 +73,10 @@ public class HttpUtils {
     public String postRequest(String baseURL, String httpMethod, List<NameValuePair> pairs, boolean waitForAResponse) throws IOException {
         String response = null;
         Logging logging = new Logging();
-        String completeURL = baseURL ;//+ "?" + URLEncodedUtils.format(pairs, "UTF-8");
-
+        String completeURL = baseURL ;
+        if (httpMethod.equalsIgnoreCase(AppConstants.HTTP_GET_METHOD)) {
+            completeURL = completeURL + "?" + URLEncodedUtils.format(pairs, "UTF-8");
+        }
         if (!checkInternetConnection()) {
             logging.error("NO INTERNET CONNECTION AVAILABLE!!");
             throw new IOException("No internet connection available");
@@ -83,25 +85,50 @@ public class HttpUtils {
         logging.debug("Connecting via HTTP to: " + completeURL);
 
         URL url = new URL(completeURL);
-        try {
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestMethod(httpMethod);
-            conn.setDoOutput(true);
-            BufferedWriter writer = new BufferedWriter( new OutputStreamWriter(conn.getOutputStream(), "UTF-8"));
-            writer.write(URLEncodedUtils.format(pairs, "UTF-8"));
-            writer.flush();
-            writer.close();
-            logging.debug("RESPONSE CODE: " + conn.getResponseCode());
+        HttpURLConnection conn;
+        if (!waitForAResponse) {
+            try {
+
+                conn = (HttpURLConnection) url.openConnection();
+                conn.setRequestMethod(httpMethod);
+                conn.setDoOutput(true);
+
+                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(conn.getOutputStream(), "UTF-8"));
+                writer.write(URLEncodedUtils.format(pairs, "UTF-8"));
+                writer.flush();
+                writer.close();
+                logging.debug("RESPONSE CODE: " + conn.getResponseCode());
 
 
-
-        } catch (IOException ioEx) {
-            logging.error(this.getClass().getName() + ". exception while performing postRequest: " + ioEx.getMessage() );
-            throw ioEx;
-        }
-        if (waitForAResponse) {
+            } catch (IOException ioEx) {
+                logging.error(this.getClass().getName() + ". exception while performing postRequest: " + ioEx.getMessage());
+                throw ioEx;
+            }
+        } else {
             // get a response from the server...
+            try {
+                conn = (HttpURLConnection) url.openConnection();
+                conn.setRequestMethod(httpMethod);
+                conn.setDoInput(true);
+
+                conn.connect();
+                InputStream inputStream = conn.getInputStream();
+                BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+                StringBuffer buffer = new StringBuffer();
+                String line ;
+                while ( (line = reader.readLine()) != null) {
+                    buffer.append(line + "\r\n");
+                }
+                inputStream.close();
+                response = buffer.toString();
+                logging.debug("Response from the server: " + response);
+            }
+            catch (IOException ioEx) {
+                logging.error(this.getClass().getName() + ". IO Exception while getting response from server.");
+                throw ioEx;
+            }
         }
+        conn.disconnect();
         return response;
     }
 
