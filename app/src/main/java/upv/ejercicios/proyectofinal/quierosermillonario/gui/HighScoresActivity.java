@@ -1,11 +1,10 @@
 package upv.ejercicios.proyectofinal.quierosermillonario.gui;
 
-import android.content.PeriodicSync;
+
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -37,8 +36,26 @@ public class HighScoresActivity extends ActionBarActivity {
 
     private String userName;
 
+    private void displayInTable(TableLayout scoresTable, List<GameScore> scores) {
+        int positionInTheRanking = 1;
+        for (GameScore score : scores) {
+
+            String textRow = String.valueOf(positionInTheRanking) + " - " +
+                    score.getUserName() + " | " + score.getMoneyAchieved() + " | "
+                    + score.getLongitude() + " " + score.getLatitude();
+            TableRow tableRow = new TableRow(this);
+            TextView textView = new TextView(this);
+            textView.setText(textRow);
+            //textView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+            textView.setTextSize(getResources().getDimension(R.dimen.scores_list_text_size));
+            tableRow.addView(textView);
+            scoresTable.addView(tableRow);
+            positionInTheRanking++;
+        }
+    }
+
     /*
-        all="true": get all scores and fill "Your friend's high scores tab"
+        all="true": get all scores and fill "Your friend's high scores tab" (get remote scores indeed)
         all="false": get only scores for current user and fill data on "Your high scores tab"
             if no user, fill in with "anonymous" scores
      */
@@ -64,21 +81,7 @@ public class HighScoresActivity extends ActionBarActivity {
           */
         if (!all) {
             TableLayout highScoresTable = (TableLayout) findViewById(R.id.user_high_scores_table_view);
-            int positionInTheRanking = 1;
-            for (GameScore score : scores) {
-
-                String textRow = String.valueOf(positionInTheRanking) + " - " +
-                        score.getUserName() + " | " + score.getMoneyAchieved() + " | "
-                        + score.getLongitude() + " " + score.getLatitude();
-                TableRow tableRow = new TableRow(this);
-                TextView textView = new TextView(this);
-                textView.setText(textRow);
-                //textView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-                textView.setTextSize(getResources().getDimension(R.dimen.scores_list_text_size));
-                tableRow.addView(textView);
-                highScoresTable.addView(tableRow);
-                positionInTheRanking++;
-            }
+            displayInTable(highScoresTable, scores);
         }
 
 
@@ -166,10 +169,16 @@ public class HighScoresActivity extends ActionBarActivity {
                 }
             }
 
-            for (GameScore gScore:gameScoreList) {
-                logging.debug("Remote High Scores Task -> gameScore: " + gScore.toString());
-            }
             return gameScoreList;
+        }
+
+        @Override
+        protected void onPostExecute(List<GameScore> gameScores) {
+            super.onPostExecute(gameScores);
+            if (gameScores != null) {
+                TableLayout remoteHighScoresTable = (TableLayout) findViewById(R.id.all_high_scores_table_view);
+                displayInTable(remoteHighScoresTable, gameScores);
+            }
         }
     }
 }
