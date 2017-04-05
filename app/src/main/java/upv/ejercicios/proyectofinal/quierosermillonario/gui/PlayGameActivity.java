@@ -81,7 +81,11 @@ public class PlayGameActivity extends AppCompatActivity {
 
 
 
-        final QuestionItem questionItem = questionItems.get(currentQuestion - 1);
+        final QuestionItem questionItem;
+        if (currentQuestion > 0)
+            questionItem  =  questionItems.get(currentQuestion - 1);
+        else
+            questionItem =  questionItems.get(currentQuestion);
 
         // sample question
         TextView txtQuestion = (TextView) findViewById(R.id.txt_question);
@@ -160,7 +164,8 @@ public class PlayGameActivity extends AppCompatActivity {
 
         gameScore = new GameScore();
         gameScore.setUserName(gameSettings.getUserName());
-        gameScore.setLastQuestionAnswered(currentQuestion - 1);
+        if (currentQuestion > 0)
+            gameScore.setLastQuestionAnswered(currentQuestion - 1);
         gameScoresService = new GameScoresService(gameScore, this.getApplicationContext());
         gameScoresService.refreshGameScore();
 

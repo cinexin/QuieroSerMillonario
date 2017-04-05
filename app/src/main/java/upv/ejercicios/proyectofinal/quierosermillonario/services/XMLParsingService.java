@@ -33,7 +33,7 @@ public class XMLParsingService implements ParsingInterface {
         String xmlFileName ;
         String langSuffix;
 
-        if (sysLang.toLowerCase().contains("es-"))
+        if (sysLang.toLowerCase().contains("es"))
             langSuffix = "ES";
         else
             langSuffix = "EN";
