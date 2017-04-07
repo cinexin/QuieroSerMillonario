@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -159,11 +160,14 @@ public class PlayGameActivity extends AppCompatActivity {
         }
         GameSettingsService gameSettingsService = new GameSettingsService(getApplicationContext());
         gameSettings = gameSettingsService.getSettings();
+        Log.d("[DEBUG]" , "Game Settings -> onCreate() PlayGameActivity: " + gameSettings.toString());
 
         currentQuestion = gameSettings.getCurrentQuestion();
 
         gameScore = new GameScore();
         gameScore.setUserName(gameSettings.getUserName());
+        gameScore.setLongitude(gameSettings.getLongitude());
+        gameScore.setLatitude(gameSettings.getLatitude());
         if (currentQuestion > 0)
             gameScore.setLastQuestionAnswered(currentQuestion - 1);
         gameScoresService = new GameScoresService(gameScore, this.getApplicationContext());
@@ -191,11 +195,11 @@ public class PlayGameActivity extends AppCompatActivity {
         Logging log = new Logging();
 
         GameSettingsService gameSettingsService = new GameSettingsService(getApplicationContext());
-        gameSettingsService.saveGamePosition(1);
+        gameSettingsService.saveGamePosition(1); // we restart the game position to the initial question
 
         try {
             gameScoresService.saveScore(); // register local score
-            // TODO: Perform remote high score registration on a separate thread....
+            // DONE: Perform remote high score registration on a separate thread....
             new SaveRemoteHighScoresTask().execute(gameScoresService);
         } catch (PersistenceException persistEx) {
             persistEx.printStackTrace();

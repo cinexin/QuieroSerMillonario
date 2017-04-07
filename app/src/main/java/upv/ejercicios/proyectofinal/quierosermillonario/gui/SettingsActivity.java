@@ -2,11 +2,16 @@ package upv.ejercicios.proyectofinal.quierosermillonario.gui;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -33,11 +38,26 @@ import upv.ejercicios.proyectofinal.quierosermillonario.utils.StringUtils;
 
 public class SettingsActivity extends ActionBarActivity {
 
+    private int localizationServiceStatus = AppConstants.STATUS_DONT_LOCATE;
+    LocationManager locationManager;
+    String locationProvider;
+    EditText txtLongitude;
+    EditText txtLatitude;
+    UserLocationListener userLocationListener;
 
+    private void getLocationServices() {
+        locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+        if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER))
+            locationProvider = LocationManager.GPS_PROVIDER;
+        else {
+            locationProvider = LocationManager.NETWORK_PROVIDER;
+        }
+    }
     private GameSettings collectInputSettings() {
         GameSettings gameSettings = new GameSettings();
 
         LoggingInterface logging = new Logging();
+
 
 
         String userName = ((EditText) findViewById(R.id.txt_user_name)).getText().toString();
@@ -52,7 +72,7 @@ public class SettingsActivity extends ActionBarActivity {
         gameSettings.setNumberOfJokers(numberOfJokers);
 
         float longitude ;
-        String longitudeAsString =  ((EditText) findViewById(R.id.txt_longitude)).getText().toString();
+        String longitudeAsString =  txtLongitude.getText().toString();
         if (!StringUtils.isEmpty( longitudeAsString) ) {
 
             try {
@@ -65,7 +85,7 @@ public class SettingsActivity extends ActionBarActivity {
         }
 
         float latitude;
-        String latitudeAsString  = ((EditText) findViewById(R.id.txt_latitude)).getText().toString();
+        String latitudeAsString  = txtLatitude.getText().toString();
         if (!StringUtils.isEmpty(latitudeAsString)) {
 
             try {
@@ -92,10 +112,10 @@ public class SettingsActivity extends ActionBarActivity {
         Spinner numOfJokersSpinner = (Spinner) findViewById(R.id.select_num_of_jokers);
         numOfJokersSpinner.setSelection(gameSettings.getNumberOfJokers());
 
-        EditText txtLongitude = (EditText) findViewById(R.id.txt_longitude);
+
         txtLongitude.setText(Float.toString(gameSettings.getLongitude()));
 
-        EditText txtLatitude = (EditText) findViewById(R.id.txt_latitude);
+
         txtLatitude.setText(Float.toString(gameSettings.getLatitude()));
 
     }
@@ -113,6 +133,8 @@ public class SettingsActivity extends ActionBarActivity {
         // Apply the adapter to the spinner
         numOfJokesSpinner.setAdapter(adapter);
 
+        txtLongitude = (EditText) findViewById(R.id.txt_longitude);
+        txtLatitude = (EditText) findViewById(R.id.txt_latitude);
         // Retrieve saved settings if already present and show them...
         GameSettingsService gameSettingsService = new GameSettingsService(getApplicationContext());
         GameSettings gameSettings =  gameSettingsService.getSettings();
@@ -143,6 +165,53 @@ public class SettingsActivity extends ActionBarActivity {
                 }
             }
         });
+
+        userLocationListener = new UserLocationListener();
+        this.getLocationServices();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_app_settings_screen, menu);
+        switch (localizationServiceStatus) {
+            case AppConstants.STATUS_LOCATE:
+                menu.findItem(R.id.btn_settings_locate_me).setVisible(false);
+                menu.findItem(R.id.btn_settings_stop_locating_me).setVisible(true);
+                break;
+
+            case AppConstants.STATUS_DONT_LOCATE:
+                menu.findItem(R.id.btn_settings_locate_me).setVisible(true);
+                menu.findItem(R.id.btn_settings_stop_locating_me).setVisible(false);
+                break;
+
+        }
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        Logging logging = new Logging();
+        switch (item.getItemId()) {
+
+            case R.id.btn_settings_locate_me:
+                this.localizationServiceStatus = AppConstants.STATUS_LOCATE;
+                try {
+                    locationManager.requestLocationUpdates(locationProvider, 0, 0, userLocationListener);
+                } catch (SecurityException securityEx) {
+                    logging.error("Couldn't get location updates. Check your GPS/Network provider: " +
+                            securityEx.getMessage());
+                    return false;
+                }
+                break;
+
+            case R.id.btn_settings_stop_locating_me:
+                this.localizationServiceStatus = AppConstants.STATUS_DONT_LOCATE;
+                locationManager.removeUpdates(userLocationListener);
+                break;
+
+        }
+        supportInvalidateOptionsMenu();
+        return super.onOptionsItemSelected(item);
     }
 
     private class AddFriendTask extends AsyncTask<Friend, Void, Friend> {
@@ -185,6 +254,32 @@ public class SettingsActivity extends ActionBarActivity {
             }
 
             Log.d("[DEBUG]", "Friend added");
+        }
+    }
+
+    private class UserLocationListener implements LocationListener {
+
+        private Logging logging = new Logging();
+
+        @Override
+        public void onStatusChanged(String provider, int status, Bundle extras) {
+            logging.warning("GPS status changed. Provider: " + provider + ". Status: " + status);
+        }
+
+        @Override
+        public void onProviderDisabled(String provider) {
+            logging.warning("Location provider disabled: " + provider);
+        }
+
+        @Override
+        public void onProviderEnabled(String provider) {
+            logging.info("Provider enabled: " + provider);
+        }
+
+        @Override
+        public void onLocationChanged(Location location) {
+            txtLongitude.setText(String.valueOf(location.getLongitude()));
+            txtLatitude.setText(String.valueOf(location.getLatitude()));
         }
     }
 }

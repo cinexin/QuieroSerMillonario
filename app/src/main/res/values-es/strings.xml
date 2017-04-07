@@ -33,4 +33,6 @@
     <string name="msg_friend_add_error">¡Hubo un error al añadir amigo</string>
     <string name="msg_high_scores_remote_record">Puntuación registrada</string>
     <string name="msg_high_scores_remote_record_error">¡Hubo un error al tratar de registrar tu puntuación remotamente!</string>
+    <string name="lbl_locate_me">¡Localízame!</string>
+    <string name="lbl_stop_locating_me">Para la localización</string>
 </resources>

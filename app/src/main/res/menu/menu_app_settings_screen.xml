@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/btn_settings_locate_me"
+        android:title="@string/lbl_locate_me"
+        android:icon="@drawable/ic_locate"
+        app:showAsAction="always"
+        />
+
+    <item
+        android:id="@+id/btn_settings_stop_locating_me"
+        android:title="@string/lbl_stop_locating_me"
+        android:icon="@drawable/ic_stop"
+        app:showAsAction="always"
+        />
+
+</menu>

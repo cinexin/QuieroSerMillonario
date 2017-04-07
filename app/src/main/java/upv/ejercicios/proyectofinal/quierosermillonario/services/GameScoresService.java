@@ -1,6 +1,7 @@
 package upv.ejercicios.proyectofinal.quierosermillonario.services;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.google.gson.Gson;
 
@@ -89,6 +90,7 @@ public class GameScoresService {
         Logging log = new Logging();
         if (dbService != null && this.gameScore != null) {
             try {
+                Log.d("[DEBUG]", "saveScore() -> GAME SCORE: " + gameScore.toString());
                 dbService.save(this.gameScore);
                 dbService.closeSession();
             } catch (PersistenceException persistenceEx) {

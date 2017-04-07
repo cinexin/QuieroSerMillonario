@@ -79,7 +79,9 @@ public class AppConstants extends Object {
     public static final String URL_USER_LONGITUDE_PARAMETER = "longitude";
     public static final String URL_USER_LATITUDE_PARAMETER = "latitude";
 
-
+    // Localization related constants...
+    public static final int STATUS_LOCATE = 0;
+    public static final int STATUS_DONT_LOCATE = 1;
 
 
 }
