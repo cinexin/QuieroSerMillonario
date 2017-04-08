@@ -43,10 +43,11 @@ public class HighScoresActivity extends ActionBarActivity {
     private void displayInTable(TableLayout scoresTable, List<GameScore> scores) {
         int positionInTheRanking = 1;
         for (GameScore score : scores) {
+            String userFriendlyLocationName = score.getUserFriendlyLocationName() == null ? "":score.getUserFriendlyLocationName();
 
-            String textRow = String.valueOf(positionInTheRanking) + " - " +
-                    score.getUserName() + " | " + score.getMoneyAchieved() + " | "
-                    + score.getUserFriendlyLocationName();
+            String textRow = String.valueOf(positionInTheRanking) + " \t " +
+                    score.getUserName() + " \t " + score.getMoneyAchieved() + " \t "
+                    + userFriendlyLocationName;
             TableRow tableRow = new TableRow(this);
             TextView textView = new TextView(this);
             textView.setText(textRow);
