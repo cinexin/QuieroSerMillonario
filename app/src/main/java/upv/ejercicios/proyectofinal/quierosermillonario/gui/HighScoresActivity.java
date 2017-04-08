@@ -23,6 +23,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 import org.json.JSONException;
 
@@ -266,6 +267,16 @@ public class HighScoresActivity extends ActionBarActivity implements OnMapReadyC
             super.onPostExecute(gameScores);
             if (gameScores != null) {
                 /* TODO: Position scores markers in the GMap */
+                for (GameScore gameScore:gameScores) {
+                    MarkerOptions markerOptions = new MarkerOptions();
+                    LatLng locationLatLng = new LatLng(Double.valueOf(gameScore.getLatitude()), Double.valueOf(gameScore.getLongitude()));
+                    markerOptions.position(locationLatLng);
+                    markerOptions.title(gameScore.getUserName());
+                    markerOptions.snippet(String.valueOf(gameScore.getMoneyAchieved()));
+                    googleMap.addMarker(markerOptions);
+
+
+                }
 
             }
         }
