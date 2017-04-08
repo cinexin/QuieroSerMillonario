@@ -1,10 +1,13 @@
 package upv.ejercicios.proyectofinal.quierosermillonario.gui;
 
 
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -20,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import upv.ejercicios.proyectofinal.quierosermillonario.R;
+import upv.ejercicios.proyectofinal.quierosermillonario.constants.AppConstants;
 import upv.ejercicios.proyectofinal.quierosermillonario.exception.PersistenceException;
 import upv.ejercicios.proyectofinal.quierosermillonario.model.GameScore;
 import upv.ejercicios.proyectofinal.quierosermillonario.model.GameSettings;
@@ -42,7 +46,7 @@ public class HighScoresActivity extends ActionBarActivity {
 
             String textRow = String.valueOf(positionInTheRanking) + " - " +
                     score.getUserName() + " | " + score.getMoneyAchieved() + " | "
-                    + score.getLongitude() + " " + score.getLatitude();
+                    + score.getUserFriendlyLocationName();
             TableRow tableRow = new TableRow(this);
             TextView textView = new TextView(this);
             textView.setText(textRow);
@@ -69,20 +73,13 @@ public class HighScoresActivity extends ActionBarActivity {
                 new RemoteHighScoresTask().execute(this.userName);
             } else {
                 scores = gameScoresService.getUserScores(this.userName);
+                new LocationsTranslationTask().execute(scores);
             }
         } catch (PersistenceException persistEx) {
             logging.error("Error while retrieving scores from database. Original error: " + persistEx.getMessage());
         }
 
-        // display them on the corresponding scores table...
-        /*
-            display only user high scores...
-            friend's high scores are displayed on a separate task since it implies HTTP communication
-          */
-        if (!all) {
-            TableLayout highScoresTable = (TableLayout) findViewById(R.id.user_high_scores_table_view);
-            displayInTable(highScoresTable, scores);
-        }
+
 
 
     }
@@ -151,6 +148,62 @@ public class HighScoresActivity extends ActionBarActivity {
 
     }
 
+    /*
+        Thread that's in charge of getting the user-friendly location from each Longitude-Latitude
+     */
+    private class LocationsTranslationTask extends AsyncTask<List<GameScore>, Void, List<GameScore>> {
+
+        @Override
+        protected List<GameScore> doInBackground(List<GameScore>... params) {
+            List<GameScore> inputGameScoreList = params[0];
+            List<GameScore> resultGameScoreList = new ArrayList<>(); // the same input game score list with user-friendly location populated
+            Logging logging = new Logging();
+
+            for (GameScore gameScore:inputGameScoreList) {
+                if (StringUtils.isEmpty(gameScore.getUserFriendlyLocationName())) {
+                    Geocoder geocoder = new Geocoder(getApplicationContext());
+                    try {
+                        List<Address> addresses = geocoder.getFromLocation(Double.valueOf(gameScore.getLatitude()).doubleValue(),
+                                Double.valueOf(gameScore.getLongitude()).doubleValue(),
+                                AppConstants.MAX_NUMBER_OF_RETURN_ADDRESSES);
+                        for (Address address:addresses) {
+                            StringBuffer userFriendlyLocationName = new StringBuffer("");
+
+                            // get locality if present
+                            if (!StringUtils.isEmpty(address.getLocality()))
+                                userFriendlyLocationName.append(address.getLocality());
+
+                            if (!StringUtils.isEmpty(userFriendlyLocationName.toString()))
+                                userFriendlyLocationName.append(" , ");
+                            // get country name and append to locality
+                            userFriendlyLocationName.append(address.getCountryName());
+
+                            gameScore.setUserFriendlyLocationName(userFriendlyLocationName.toString());
+                        }
+                        resultGameScoreList.add(gameScore);
+                    } catch (IOException ioEx) {
+                        logging.error("Error when translating lat/long into user friendly location: " + ioEx.getMessage());
+                        ioEx.printStackTrace();
+                        return null;
+                    }
+                }
+            }
+
+
+            return resultGameScoreList;
+        }
+
+        @Override
+        protected void onPostExecute(List<GameScore> gameScores) {
+            super.onPostExecute(gameScores);
+            TableLayout highScoresTable = (TableLayout) findViewById(R.id.user_high_scores_table_view);
+            displayInTable(highScoresTable, gameScores);
+        }
+    }
+
+    /*
+        Thread that's in charge of getting remote high scores (via REST-WS)
+     */
     private class RemoteHighScoresTask extends AsyncTask<String, Void, List<GameScore>> {
         @Override
         protected List<GameScore> doInBackground(String... params) {

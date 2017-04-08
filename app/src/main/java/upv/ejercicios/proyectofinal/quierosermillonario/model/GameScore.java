@@ -12,6 +12,7 @@ public class GameScore {
     String userName; // user name in case of "non-anonymous" gamer
     float longitude; // user's location (longitude)
     float latitude; // user's location (latitude)
+    String userFriendlyLocationName;
 
     public GameScore() {
 
@@ -90,6 +91,13 @@ public class GameScore {
         this.moneyEnsured = moneyEnsured;
     }
 
+    public String getUserFriendlyLocationName() {
+        return userFriendlyLocationName;
+    }
+
+    public void setUserFriendlyLocationName(String userFriendlyLocationName) {
+        this.userFriendlyLocationName = userFriendlyLocationName;
+    }
 
     @Override
     public String toString() {
@@ -101,6 +109,7 @@ public class GameScore {
                 ", userName = " + userName +
                 ", longitude = " + longitude +
                 ", latitude = " + latitude +
+                ", userFriendlyLocationName = " + userFriendlyLocationName +
         '}';
     }
 }

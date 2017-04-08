@@ -82,6 +82,7 @@ public class AppConstants extends Object {
     // Localization related constants...
     public static final int STATUS_LOCATE = 0;
     public static final int STATUS_DONT_LOCATE = 1;
+    public static final int MAX_NUMBER_OF_RETURN_ADDRESSES = 1; // max number of return addresses when geoCoder translation
 
 
 }
