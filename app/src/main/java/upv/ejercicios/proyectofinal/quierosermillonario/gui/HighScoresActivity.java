@@ -265,7 +265,7 @@ public class HighScoresActivity extends ActionBarActivity implements OnMapReadyC
         protected void onPostExecute(List<GameScore> gameScores) {
             super.onPostExecute(gameScores);
             if (gameScores != null) {
-
+                /* TODO: Position scores markers in the GMap */
 
             }
         }
