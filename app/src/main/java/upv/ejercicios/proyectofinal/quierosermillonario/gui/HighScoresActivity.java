@@ -265,8 +265,7 @@ public class HighScoresActivity extends ActionBarActivity implements OnMapReadyC
         protected void onPostExecute(List<GameScore> gameScores) {
             super.onPostExecute(gameScores);
             if (gameScores != null) {
-                HighScoresTableParams highScoresTableParams = new HighScoresTableParams(gameScores, true);
-                new LocationsTranslationTask().execute(highScoresTableParams);
+
 
             }
         }
