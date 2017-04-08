@@ -112,14 +112,14 @@ public class HighScoresActivity extends ActionBarActivity implements OnMapReadyC
             userHighScoresTable.removeAllViews();
         } catch (PersistenceException persistEx) {
             Logging logging = new Logging();
-            logging.error("Error while removing");
+            logging.error(this.getClass().getName() + ": " + "Error while removing scores. Cause: " + persistEx.getMessage());
         }
     }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         googleMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
-        
+
         googleMap.moveCamera(CameraUpdateFactory.zoomIn());
         this.googleMap = googleMap;
     }
