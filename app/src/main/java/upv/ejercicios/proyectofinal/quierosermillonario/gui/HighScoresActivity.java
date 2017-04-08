@@ -11,6 +11,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.TabHost;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -27,6 +29,7 @@ import upv.ejercicios.proyectofinal.quierosermillonario.constants.AppConstants;
 import upv.ejercicios.proyectofinal.quierosermillonario.exception.PersistenceException;
 import upv.ejercicios.proyectofinal.quierosermillonario.model.GameScore;
 import upv.ejercicios.proyectofinal.quierosermillonario.model.GameSettings;
+import upv.ejercicios.proyectofinal.quierosermillonario.model.taskParams.HighScoresTableParams;
 import upv.ejercicios.proyectofinal.quierosermillonario.services.GameScoresService;
 import upv.ejercicios.proyectofinal.quierosermillonario.services.GameSettingsService;
 import upv.ejercicios.proyectofinal.quierosermillonario.utils.Logging;
@@ -45,18 +48,28 @@ public class HighScoresActivity extends ActionBarActivity {
         for (GameScore score : scores) {
             String userFriendlyLocationName = score.getUserFriendlyLocationName() == null ? "":score.getUserFriendlyLocationName();
 
-            String textRow = String.valueOf(positionInTheRanking) + " \t " +
-                    score.getUserName() + " \t " + score.getMoneyAchieved() + " \t "
-                    + userFriendlyLocationName;
+            StringBuilder textRow = new StringBuilder("");
+            textRow.append(String.valueOf(positionInTheRanking));
+            textRow.append(" - "); // tab
+            textRow.append(score.getUserName());
+            textRow.append(" - "); // tab
+            textRow.append(score.getMoneyAchieved());
+            textRow.append(" - "); // tab
+            textRow.append(userFriendlyLocationName);
+
+
             TableRow tableRow = new TableRow(this);
             TextView textView = new TextView(this);
-            textView.setText(textRow);
+            textView.setText(textRow.toString());
+
             //textView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
             textView.setTextSize(getResources().getDimension(R.dimen.scores_list_text_size));
             tableRow.addView(textView);
             scoresTable.addView(tableRow);
             positionInTheRanking++;
         }
+        ProgressBar progressBar = (ProgressBar) findViewById(R.id.high_scores_progress_bar);
+        progressBar.setVisibility(View.GONE);
     }
 
     /*
@@ -74,14 +87,12 @@ public class HighScoresActivity extends ActionBarActivity {
                 new RemoteHighScoresTask().execute(this.userName);
             } else {
                 scores = gameScoresService.getUserScores(this.userName);
-                new LocationsTranslationTask().execute(scores);
+                HighScoresTableParams highScoresTableParams = new HighScoresTableParams(scores, false);
+                new LocationsTranslationTask().execute(highScoresTableParams);
             }
         } catch (PersistenceException persistEx) {
             logging.error("Error while retrieving scores from database. Original error: " + persistEx.getMessage());
         }
-
-
-
 
     }
 
@@ -152,15 +163,18 @@ public class HighScoresActivity extends ActionBarActivity {
     /*
         Thread that's in charge of getting the user-friendly location from each Longitude-Latitude
      */
-    private class LocationsTranslationTask extends AsyncTask<List<GameScore>, Void, List<GameScore>> {
+    private class LocationsTranslationTask extends AsyncTask<HighScoresTableParams, Void, HighScoresTableParams> {
 
         @Override
-        protected List<GameScore> doInBackground(List<GameScore>... params) {
-            List<GameScore> inputGameScoreList = params[0];
-            List<GameScore> resultGameScoreList = new ArrayList<>(); // the same input game score list with user-friendly location populated
+        protected HighScoresTableParams doInBackground(HighScoresTableParams... params) {
+            HighScoresTableParams inputHighScoresTableParams = params[0];
+            HighScoresTableParams resultHighScoresTableParams = new HighScoresTableParams(); // the same input game score list with user-friendly location populated
             Logging logging = new Logging();
 
-            for (GameScore gameScore:inputGameScoreList) {
+            resultHighScoresTableParams.setRemote(inputHighScoresTableParams.isRemote());
+            resultHighScoresTableParams.setGameScoreList(new ArrayList<GameScore>());
+
+            for (GameScore gameScore:inputHighScoresTableParams.getGameScoreList()) {
                 if (StringUtils.isEmpty(gameScore.getUserFriendlyLocationName())) {
                     Geocoder geocoder = new Geocoder(getApplicationContext());
                     try {
@@ -181,7 +195,7 @@ public class HighScoresActivity extends ActionBarActivity {
 
                             gameScore.setUserFriendlyLocationName(userFriendlyLocationName.toString());
                         }
-                        resultGameScoreList.add(gameScore);
+                        resultHighScoresTableParams.getGameScoreList().add(gameScore);
                     } catch (IOException ioEx) {
                         logging.error("Error when translating lat/long into user friendly location: " + ioEx.getMessage());
                         ioEx.printStackTrace();
@@ -191,14 +205,20 @@ public class HighScoresActivity extends ActionBarActivity {
             }
 
 
-            return resultGameScoreList;
+            return resultHighScoresTableParams;
         }
 
         @Override
-        protected void onPostExecute(List<GameScore> gameScores) {
-            super.onPostExecute(gameScores);
-            TableLayout highScoresTable = (TableLayout) findViewById(R.id.user_high_scores_table_view);
-            displayInTable(highScoresTable, gameScores);
+        protected void onPostExecute(HighScoresTableParams highScoresTableParams) {
+            super.onPostExecute(highScoresTableParams);
+
+            TableLayout highScoresTable;
+            if (highScoresTableParams.isRemote())
+                highScoresTable = (TableLayout) findViewById(R.id.all_high_scores_table_view);
+            else
+                highScoresTable = (TableLayout) findViewById(R.id.user_high_scores_table_view);
+
+            displayInTable(highScoresTable, highScoresTableParams.getGameScoreList());
         }
     }
 
@@ -230,8 +250,9 @@ public class HighScoresActivity extends ActionBarActivity {
         protected void onPostExecute(List<GameScore> gameScores) {
             super.onPostExecute(gameScores);
             if (gameScores != null) {
-                TableLayout remoteHighScoresTable = (TableLayout) findViewById(R.id.all_high_scores_table_view);
-                displayInTable(remoteHighScoresTable, gameScores);
+                HighScoresTableParams highScoresTableParams = new HighScoresTableParams(gameScores, true);
+                new LocationsTranslationTask().execute(highScoresTableParams);
+
             }
         }
     }
