@@ -18,6 +18,11 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.OnMapReadyCallback;
+
 import org.json.JSONException;
 
 import java.io.IOException;
@@ -39,9 +44,10 @@ import upv.ejercicios.proyectofinal.quierosermillonario.utils.StringUtils;
  * Created by migui on 0012.
  */
 
-public class HighScoresActivity extends ActionBarActivity {
+public class HighScoresActivity extends ActionBarActivity implements OnMapReadyCallback {
 
     private String userName;
+    private GoogleMap googleMap;
 
     private void displayInTable(TableLayout scoresTable, List<GameScore> scores) {
         int positionInTheRanking = 1;
@@ -96,18 +102,24 @@ public class HighScoresActivity extends ActionBarActivity {
 
     }
 
+
     private void clearScores() {
         GameScoresService gameScoresService= new GameScoresService(this.getApplicationContext());
         try {
             gameScoresService.clearScores();
             TableLayout userHighScoresTable = (TableLayout) findViewById(R.id.user_high_scores_table_view);
-            TableLayout friendsHighScoresTable = (TableLayout) findViewById(R.id.all_high_scores_table_view);
             userHighScoresTable.removeAllViews();
-            friendsHighScoresTable.removeAllViews();
         } catch (PersistenceException persistEx) {
             Logging logging = new Logging();
             logging.error("Error while removing");
         }
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        googleMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+        googleMap.moveCamera(CameraUpdateFactory.zoomIn());
+        this.googleMap = googleMap;
     }
 
     @Override
@@ -136,6 +148,9 @@ public class HighScoresActivity extends ActionBarActivity {
 
         fillHighScoresTable(false);
         fillHighScoresTable(true);
+
+        MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.myMap);
+        mapFragment.getMapAsync(this);
 
     }
 
@@ -213,10 +228,8 @@ public class HighScoresActivity extends ActionBarActivity {
             super.onPostExecute(highScoresTableParams);
 
             TableLayout highScoresTable;
-            if (highScoresTableParams.isRemote())
-                highScoresTable = (TableLayout) findViewById(R.id.all_high_scores_table_view);
-            else
-                highScoresTable = (TableLayout) findViewById(R.id.user_high_scores_table_view);
+
+            highScoresTable = (TableLayout) findViewById(R.id.user_high_scores_table_view);
 
             displayInTable(highScoresTable, highScoresTableParams.getGameScoreList());
         }
