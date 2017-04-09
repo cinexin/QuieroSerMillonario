@@ -1,6 +1,7 @@
 package upv.ejercicios.proyectofinal.quierosermillonario.gui;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import android.widget.Button;
 import java.util.List;
 
 import upv.ejercicios.proyectofinal.quierosermillonario.R;
+import upv.ejercicios.proyectofinal.quierosermillonario.model.AnswerSet;
 
 /**
  * Created by migui on 0013.
@@ -18,22 +20,54 @@ import upv.ejercicios.proyectofinal.quierosermillonario.R;
 public class AnswerItemAdapter extends BaseAdapter {
 
     private Context context;
-    private List<String> answersList;
+    AnswerSet answerSet;
+    private boolean audienceJokerRequested ;
+    private boolean fiftyPercentJokerRequested;
+    private boolean phoneCallJokerRequested;
 
-    public AnswerItemAdapter(Context context, List<String> answersList) {
+    public AnswerItemAdapter(Context context, AnswerSet answerSet) {
         this.context = context;
-        this.answersList = answersList;
+        this.answerSet = answerSet;
+        this.audienceJokerRequested = false;
+        this.fiftyPercentJokerRequested = false;
+        this.phoneCallJokerRequested = false;
+    }
+
+    public boolean isAudienceJokerRequested() {
+        return audienceJokerRequested;
+    }
+
+    public void setAudienceJokerRequested(boolean audienceJokerRequested) {
+        this.audienceJokerRequested = audienceJokerRequested;
+    }
+
+    public boolean isFiftyPercentJokerRequested() {
+        return fiftyPercentJokerRequested;
+    }
+
+    public void setFiftyPercentJokerRequested(boolean fiftyPercentJokerRequested) {
+        this.fiftyPercentJokerRequested = fiftyPercentJokerRequested;
+    }
+
+    public boolean isPhoneCallJokerRequested() {
+        return phoneCallJokerRequested;
+    }
+
+    public void setPhoneCallJokerRequested(boolean phoneCallJokerRequested) {
+        this.phoneCallJokerRequested = phoneCallJokerRequested;
     }
 
     @Override
     public int getCount() {
-        return answersList.size();
+        return answerSet.getPossibleAnswers().size();
     }
 
     @Override
     public Object getItem(int position) {
-        return answersList.get(position);
+        return answerSet.getPossibleAnswers().get(position);
     }
+
+
 
     @Override
     public long getItemId(int position) {
@@ -44,6 +78,7 @@ public class AnswerItemAdapter extends BaseAdapter {
     public View getView(final int position, View convertView, ViewGroup parent) {
         View rowView ;
 
+        Log.d("[DEBUG]", "Get View called");
         if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             rowView = inflater.inflate(R.layout.answer_item,parent, false);
@@ -54,12 +89,24 @@ public class AnswerItemAdapter extends BaseAdapter {
 
         // Set data into the possible answers view....
         Button answerButton = (Button) rowView.findViewById(R.id.btn_answer_item);
-        String answerItem = this.answersList.get(position);
+        String answerItem = this.answerSet.getPossibleAnswers().get(position);
 
         answerButton.setText(answerItem);
 
+        /*
+            TODO: Complete Jokers management....
+          */
+        if (this.audienceJokerRequested && position == (answerSet.getAnswerWhenAudienceJoker() - 1)) {
+            answerButton.setBackgroundColor(rowView.getResources().getColor(R.color.suggestedAnswer));
+        }
+
+
+
+
+
         return rowView;
     }
+
 
 
 }

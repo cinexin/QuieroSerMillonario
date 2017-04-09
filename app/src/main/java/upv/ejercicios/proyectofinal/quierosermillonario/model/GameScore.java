@@ -13,6 +13,7 @@ public class GameScore {
     float longitude; // user's location (longitude)
     float latitude; // user's location (latitude)
     String userFriendlyLocationName;
+    JokerStatus jokerStatus;
 
     public GameScore() {
 
@@ -23,6 +24,7 @@ public class GameScore {
         this.moneyAchieved = moneyAchieved;
         this.playingFor = playingFor;
         this.moneyEnsured = moneyEnsured;
+        this.jokerStatus = new JokerStatus();
     }
 
     public String getUserName() {
@@ -49,7 +51,8 @@ public class GameScore {
         this.latitude = latitude;
     }
 
-    public GameScore(int lastQuestionAnswered, int moneyAchieved, int playingFor, int moneyEnsured, String userName, float longitude, float latitude) {
+    public GameScore(int lastQuestionAnswered, int moneyAchieved, int playingFor,
+                     int moneyEnsured, String userName, float longitude, float latitude) {
         this.lastQuestionAnswered = lastQuestionAnswered;
         this.moneyAchieved = moneyAchieved;
         this.playingFor = playingFor;
@@ -99,6 +102,14 @@ public class GameScore {
         this.userFriendlyLocationName = userFriendlyLocationName;
     }
 
+    public JokerStatus getJokerStatus() {
+        return jokerStatus;
+    }
+
+    public void setJokerStatus(JokerStatus jokerStatus) {
+        this.jokerStatus = jokerStatus;
+    }
+
     @Override
     public String toString() {
         return "GameScore{" +
@@ -106,10 +117,11 @@ public class GameScore {
                 ", moneyAchieved=" + moneyAchieved +
                 ", playingFor=" + playingFor +
                 ", moneyEnsured=" + moneyEnsured +
-                ", userName = " + userName +
-                ", longitude = " + longitude +
-                ", latitude = " + latitude +
-                ", userFriendlyLocationName = " + userFriendlyLocationName +
-        '}';
+                ", userName='" + userName + '\'' +
+                ", longitude=" + longitude +
+                ", latitude=" + latitude +
+                ", userFriendlyLocationName='" + userFriendlyLocationName + '\'' +
+                ", jokerStatus=" + jokerStatus +
+                '}';
     }
 }

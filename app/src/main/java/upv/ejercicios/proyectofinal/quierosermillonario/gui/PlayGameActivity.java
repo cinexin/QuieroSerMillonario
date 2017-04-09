@@ -10,6 +10,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.GridView;
 import android.widget.TextView;
 
@@ -25,8 +26,10 @@ import upv.ejercicios.proyectofinal.quierosermillonario.constants.AppConstants;
 import upv.ejercicios.proyectofinal.quierosermillonario.exception.PersistenceException;
 import upv.ejercicios.proyectofinal.quierosermillonario.gui.utils.ModalYesNoMessage;
 import upv.ejercicios.proyectofinal.quierosermillonario.gui.utils.ToastMessage;
+import upv.ejercicios.proyectofinal.quierosermillonario.model.AnswerSet;
 import upv.ejercicios.proyectofinal.quierosermillonario.model.GameScore;
 import upv.ejercicios.proyectofinal.quierosermillonario.model.GameSettings;
+import upv.ejercicios.proyectofinal.quierosermillonario.model.JokerStatus;
 import upv.ejercicios.proyectofinal.quierosermillonario.model.QuestionItem;
 import upv.ejercicios.proyectofinal.quierosermillonario.services.GameScoresService;
 import upv.ejercicios.proyectofinal.quierosermillonario.services.GameSettingsService;
@@ -45,6 +48,7 @@ public class PlayGameActivity extends AppCompatActivity {
     private GameScoresService gameScoresService;
     private List<QuestionItem> questionItems;
     private boolean gameFinished = false;
+    private AnswerItemAdapter answerItemAdapter;
 
 
     private void manageAvailableJokers(int numberOfJokers, Menu menu) {
@@ -71,6 +75,17 @@ public class PlayGameActivity extends AppCompatActivity {
                 // all jokers are available by default
                 break;
         }
+
+        JokerStatus jokerStatus = gameScore.getJokerStatus();
+        if (jokerStatus != null) {
+
+            if (jokerStatus.isAudienceJokerUsed())
+                menu.removeItem(R.id.btn_audience_joker);
+            if (jokerStatus.isFiftyPercentJokerUsed())
+                menu.removeItem(R.id.btn_fifty_percent_joker);
+            if (jokerStatus.isPhoneCallJokerUsed())
+                menu.removeItem(R.id.btn_call_joker);
+        }
     }
 
     // DONE: displayCurrentQuestion() implementation
@@ -95,17 +110,28 @@ public class PlayGameActivity extends AppCompatActivity {
         TextView txtQuestionNumber = (TextView) findViewById(R.id.txt_question_number) ;
         txtQuestionNumber.setText(String.valueOf(currentQuestion));
 
-        // sample - 1st question 4 possible answers
 
-        List<String> possibleAnswers =  new ArrayList<>();
-        possibleAnswers.add(0, questionItem.getAnswer1());
-        possibleAnswers.add(1, questionItem.getAnswer2());
-        possibleAnswers.add(2, questionItem.getAnswer3());
-        possibleAnswers.add(3, questionItem.getAnswer4());
+        AnswerSet answerSet = new AnswerSet(questionItem);
+
 
         this.answersGridView = (GridView) findViewById(R.id.possible_answers_grid_view);
-        final AnswerItemAdapter answerItemAdapter =  new AnswerItemAdapter(this, possibleAnswers);
+        answerItemAdapter =  new AnswerItemAdapter(this, answerSet);
+        answerItemAdapter.setAudienceJokerRequested(false);
+
+        /* PoC: changing a random button (answer button) */
         this.answersGridView.setAdapter(answerItemAdapter);
+        //this.answersGridView.setBackgroundColor(getResources().getColor(R.color.rightAnswer));
+        View answerView = this.answersGridView.getAdapter().getView(2, findViewById(R.id.rl_answers),this.answersGridView );
+        Button answerButton = (Button) answerView.findViewById(R.id.btn_answer_item);
+        Log.d("[DEBUG]", "AnswerButtonView: " + answerButton);
+        answerButton.setBackgroundColor(getResources().getColor(R.color.wrongAnswer));
+        answerButton.setTextColor(getResources().getColor(R.color.wrongAnswer));
+
+        answerButton.setTag(new String("WRONG"));
+        Log.d("[DEBUG]", "Answer Button Text: " + answerButton.getText());
+
+        answerItemAdapter.notifyDataSetChanged();
+
 
 
         TextView txtPlayingFor = (TextView) findViewById(R.id.txt_playing_for);
@@ -168,6 +194,12 @@ public class PlayGameActivity extends AppCompatActivity {
         gameScore.setUserName(gameSettings.getUserName());
         gameScore.setLongitude(gameSettings.getLongitude());
         gameScore.setLatitude(gameSettings.getLatitude());
+        JokerStatus jokerStatus = new JokerStatus();
+        jokerStatus.setAudienceJokerUsed(gameSettings.isAudienceJokerUsed());
+        jokerStatus.setFiftyPercentJokerUsed(gameSettings.isFiftyPercentJokerUsed());
+        jokerStatus.setPhoneCallJokerUsed(gameSettings.isPhoneCallJokerUsed());
+        gameScore.setJokerStatus(jokerStatus);
+
         if (currentQuestion > 0)
             gameScore.setLastQuestionAnswered(currentQuestion - 1);
         gameScoresService = new GameScoresService(gameScore, this.getApplicationContext());
@@ -177,6 +209,9 @@ public class PlayGameActivity extends AppCompatActivity {
         displayCurrentQuestion();
 
         log.debug(gameScoresService.getGameScore().toString());
+
+
+
     }
 
     @Override
@@ -191,11 +226,13 @@ public class PlayGameActivity extends AppCompatActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
+
+
     private void updateScoresAndQuitGame() {
         Logging log = new Logging();
 
         GameSettingsService gameSettingsService = new GameSettingsService(getApplicationContext());
-        gameSettingsService.saveGamePosition(1); // we restart the game position to the initial question
+        gameSettingsService.resetGameState(); // we restart the game position to the initial state
 
         try {
             gameScoresService.saveScore(); // register local score
@@ -253,6 +290,28 @@ public class PlayGameActivity extends AppCompatActivity {
             case R.id.btn_quit_game:
                 finishGame(AppConstants.CONTESTANT_ABANDONED_GAME);
                 return true;
+            case R.id.btn_call_joker:
+                answerItemAdapter.setPhoneCallJokerRequested(true);
+                gameScore.getJokerStatus().setPhoneCallJokerUsed(true);
+                gameScore.getJokerStatus().increaseNumOfJokersUsed();
+                item.setEnabled(false);
+                answerItemAdapter.notifyDataSetChanged();
+                return true;
+            case R.id.btn_audience_joker:
+                answerItemAdapter.setAudienceJokerRequested(true);
+                gameScore.getJokerStatus().setAudienceJokerUsed(true);
+                gameScore.getJokerStatus().increaseNumOfJokersUsed();
+                item.setEnabled(false);
+                answerItemAdapter.notifyDataSetChanged();
+                return true;
+
+            case R.id.btn_fifty_percent_joker:
+                answerItemAdapter.setFiftyPercentJokerRequested(true);
+                gameScore.getJokerStatus().setFiftyPercentJokerUsed(true);
+                gameScore.getJokerStatus().increaseNumOfJokersUsed();
+                item.setEnabled(false);
+                answerItemAdapter.notifyDataSetChanged();
+                return true;
 
             default:
                 return super.onOptionsItemSelected(item);
@@ -266,8 +325,16 @@ public class PlayGameActivity extends AppCompatActivity {
         Logging logger = new Logging();
         logger.debug("On Pause()....");
         logger.debug("Saving game position...");
-        if (!gameFinished)
-            gameSettingsService.saveGamePosition(currentQuestion);
+        if (!gameFinished) {
+            Log.d("[DEBUG]", "On Pause() -> gameScore: " + gameScore);
+            JokerStatus jokerStatus = gameScore.getJokerStatus();
+            if (jokerStatus != null) {
+                gameSettingsService.saveGameState(currentQuestion, jokerStatus.isAudienceJokerUsed(),
+                        jokerStatus.isFiftyPercentJokerUsed(), jokerStatus.isPhoneCallJokerUsed());
+            } else {
+                gameSettingsService.saveGameState(currentQuestion);
+            }
+        }
         logger.debug("GAME SETTINGS: " + gameSettingsService.getSettings().toString());
         super.onPause();
     }

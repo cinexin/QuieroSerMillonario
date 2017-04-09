@@ -6,4 +6,5 @@
     <color name="rightAnswer">#25A82B</color>
     <color name="wrongAnswer">#FF0000</color>
     <color name="errorGeneric">#FF0000</color>
+    <color name="suggestedAnswer">#F49842</color>
 </resources>

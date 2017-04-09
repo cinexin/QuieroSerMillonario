@@ -11,7 +11,10 @@ public class GameSettings extends Object {
     private float longitude;
     private float latitude;
     private int currentQuestion = 1;
-    private int[] amountWithQuestionRelationship;
+    private boolean audienceJokerUsed = false;
+    private boolean fiftyPercentJokerUsed = false;
+    private boolean phoneCallJokerUsed = false;
+
 
     public GameSettings() {
 
@@ -22,6 +25,9 @@ public class GameSettings extends Object {
         this.numberOfJokers = numberOfJokers;
         this.longitude = longitude;
         this.latitude = latitude;
+        this.audienceJokerUsed = false;
+        this.fiftyPercentJokerUsed = false;
+        this.phoneCallJokerUsed = false;
     }
 
     public GameSettings(String userName, int numberOfJokers, float longitude, float latitude, int currentQuestion) {
@@ -30,6 +36,9 @@ public class GameSettings extends Object {
         this.longitude = longitude;
         this.latitude = latitude;
         this.currentQuestion = currentQuestion;
+        this.audienceJokerUsed = false;
+        this.phoneCallJokerUsed = false;
+        this.fiftyPercentJokerUsed = false;
     }
 
     public String getUserName() {
@@ -72,14 +81,41 @@ public class GameSettings extends Object {
         this.currentQuestion = currentQuestion;
     }
 
+    public boolean isAudienceJokerUsed() {
+        return audienceJokerUsed;
+    }
+
+    public void setAudienceJokerUsed(boolean audienceJokerUsed) {
+        this.audienceJokerUsed = audienceJokerUsed;
+    }
+
+    public boolean isFiftyPercentJokerUsed() {
+        return fiftyPercentJokerUsed;
+    }
+
+    public void setFiftyPercentJokerUsed(boolean fiftyPercentJokerUsed) {
+        this.fiftyPercentJokerUsed = fiftyPercentJokerUsed;
+    }
+
+    public boolean isPhoneCallJokerUsed() {
+        return phoneCallJokerUsed;
+    }
+
+    public void setPhoneCallJokerUsed(boolean phoneCallJokerUsed) {
+        this.phoneCallJokerUsed = phoneCallJokerUsed;
+    }
+
     @Override
     public String toString() {
-        return "Settings{" +
+        return "GameSettings{" +
                 "userName='" + userName + '\'' +
                 ", numberOfJokers=" + numberOfJokers +
                 ", longitude=" + longitude +
                 ", latitude=" + latitude +
-                ", currentQuestion = " + currentQuestion +
+                ", currentQuestion=" + currentQuestion +
+                ", audienceJokerUsed=" + audienceJokerUsed +
+                ", fiftyPercentJokerUsed=" + fiftyPercentJokerUsed +
+                ", phoneCallJokerUsed=" + phoneCallJokerUsed +
                 '}';
     }
 }
