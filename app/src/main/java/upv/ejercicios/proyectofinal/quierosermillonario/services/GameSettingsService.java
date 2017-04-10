@@ -90,7 +90,7 @@ public class GameSettingsService implements SettingsInterface {
         _prefsEditor.putBoolean(AppConstants.SETTINGS_AUDIENCE_JOKER_USED, false);
         _prefsEditor.putBoolean(AppConstants.SETTINGS_FIFTY_PERCENT_JOKER_USED, false);
         _prefsEditor.putBoolean(AppConstants.SETTINGS_PHONE_CALL_JOKER_USED, false);
-
+        _prefsEditor.commit();
     }
 
     public GameSettingsService(Context context) {

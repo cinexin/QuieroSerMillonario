@@ -27,19 +27,24 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@android:id/tabcontent">
-            <LinearLayout
+            <ScrollView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:id="@+id/user_high_scores_view">
-                <TableLayout
+                android:layout_height="wrap_content">
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/user_high_scores_table_view"
+                    android:orientation="horizontal"
+                    android:id="@+id/user_high_scores_view"
 
                     >
-                </TableLayout>
-            </LinearLayout>
+                    <TableLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/user_high_scores_table_view"
+                        >
+                    </TableLayout>
+                </LinearLayout>
+            </ScrollView>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

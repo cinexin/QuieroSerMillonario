@@ -96,12 +96,25 @@ public class AnswerItemAdapter extends BaseAdapter {
         /*
             TODO: Complete Jokers management....
           */
+
+        // audience Joker...
         if (this.audienceJokerRequested && position == (answerSet.getAnswerWhenAudienceJoker() - 1)) {
             answerButton.setBackgroundColor(rowView.getResources().getColor(R.color.suggestedAnswer));
         }
 
+        // phone call Joker....
+        if (this.phoneCallJokerRequested && position == (answerSet.getAnswerWhenPhoneCallJoker() -1)) {
+            answerButton.setBackgroundColor(rowView.getResources().getColor(R.color.suggestedAnswer));
+        }
 
-
+        // 50% joker...
+        if (this.fiftyPercentJokerRequested &&
+                ( position == (answerSet.getAnswer1ToDiscardWhenFiftyPercentJoker() -1) ||
+                        position == (answerSet.getAnswer2ToDiscardWhenFiftyPercentJoker() -1)
+                )
+            ) {
+            answerButton.setAlpha((float) 0.5);
+        }
 
 
         return rowView;
