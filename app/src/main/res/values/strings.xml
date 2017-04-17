@@ -49,4 +49,6 @@
     <string name="lbl_stop_locating_me">Stop locating me</string>
     <string name="msg_you_lose_the_game">Oooohh...incorrect answer. You lost the game... :-(</string>
     <string name="lbl_score_achieved">Score achieved: </string>
+    <string name="msg_are_you_ready_for_your_last_answer">Hey! You\'ve reached the last answer! Are you ready to become millionaire? >:) </string>
+    <string name="msg_you_won_the_game">Congratulations!!!! You won the game!!! :D</string>
 </resources>

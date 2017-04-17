@@ -39,4 +39,6 @@
     <string name="lbl_stop_locating_me">Para la localización</string>
     <string name="msg_you_lose_the_game">Oooohh...respuesta incorrecta. Perdiste el juego... :-(</string>
     <string name="lbl_score_achieved">Puntuación conseguida: </string>
+    <string name="msg_are_you_ready_for_your_last_answer">¡Ey! Ya estás en la última pregunta! ¿Estás preprad@ para convertirte en millionari@? >:) </string>
+    <string name="msg_you_won_the_game">¡¡¡Felicidades!!!! ¡¡¡Has ganado el juego!!! :D</string>
 </resources>

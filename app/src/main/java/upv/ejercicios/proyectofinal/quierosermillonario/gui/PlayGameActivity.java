@@ -135,10 +135,21 @@ public class PlayGameActivity extends AppCompatActivity {
                     logging.debug("RIGHT ANSWER :-)");
                     view.setBackgroundColor(getResources().getColor(R.color.rightAnswer));
                     ToastMessage.rightAnswerMessage(getApplicationContext());
-                    gameScoresService.nextQuestion();
-                    currentQuestion++;
+                    if (currentQuestion == AppConstants.NUMBER_OF_QUESTIONS) {
+                        /*
+                            user won the game!
+                         */
+                        gameScoresService.nextQuestion(); // actually user's just answered the last question!
+                        finishGame(AppConstants.CONTESTANT_WON_GAME);
 
-                    displayCurrentQuestion();
+                    } else {
+                        /*
+                            update scores and let's go to next question...
+                         */
+                        gameScoresService.nextQuestion();
+                        currentQuestion++;
+                        displayCurrentQuestion();
+                    }
 
                 } else { // wrong answer :(
                     logging.debug("WRONG ANSWER :-(");
@@ -148,7 +159,25 @@ public class PlayGameActivity extends AppCompatActivity {
             }
         });
 
-
+        /*
+            Special message when we're on last answer...
+            ;-)
+        */
+        if (currentQuestion == AppConstants.NUMBER_OF_QUESTIONS) {
+            DialogInterface.OnClickListener onClickListener = new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    switch (which) {
+                        case DialogInterface.BUTTON_POSITIVE:
+                            dialog.dismiss();
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            };
+            ModalMessage.ModalInfoMessage(PlayGameActivity.this, getResources().getString(R.string.msg_are_you_ready_for_your_last_answer),onClickListener);
+        }
     }
 
     @Override
@@ -278,8 +307,26 @@ public class PlayGameActivity extends AppCompatActivity {
                 }
             };
 
-            // TODO: Change the call to adapt to refactored class
+            // DONE: Change the call to adapt to refactored class
             ModalMessage.ModalYesNoMessage(PlayGameActivity.this, R.string.abandon_game_confirmation, yesNoDialogClickListener);
+
+        } else {
+            /*
+                Contestant won the game!!
+            */
+            DialogInterface.OnClickListener onClickListener = new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    switch (which) {
+                        case DialogInterface.BUTTON_POSITIVE:
+                            updateScoresAndQuitGame();
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            };
+            ModalMessage.ModalInfoMessage(PlayGameActivity.this, R.string.msg_you_won_the_game, onClickListener);
 
         }
 

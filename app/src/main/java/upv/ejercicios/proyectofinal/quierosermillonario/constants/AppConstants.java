@@ -34,6 +34,7 @@ public class AppConstants extends Object {
     // cause of game ending
     public static final int CONTESTANT_FAILED_QUESTION = 1;
     public static final int CONTESTANT_ABANDONED_GAME = 2;
+    public static final int CONTESTANT_WON_GAME = 3;
     public static final String DEFAULT_YES_NO_MSG = "Are you sure?";
 
     // Auxiliary resources locations / names

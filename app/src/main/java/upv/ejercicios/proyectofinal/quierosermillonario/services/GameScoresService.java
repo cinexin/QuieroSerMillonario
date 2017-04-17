@@ -66,15 +66,21 @@ public class GameScoresService {
         if (this.gameScore != null) {
             Logging logging = new Logging();
             logging.debug("Refresh game scores initial state: " + gameScore.toString());
-            gameScore.setMoneyAchieved(AppConstants.QUESTIONS_VALUE[gameScore.getLastQuestionAnswered()]);
-            gameScore.setPlayingFor(AppConstants.QUESTIONS_VALUE[gameScore.getLastQuestionAnswered() + 1]);
-            if (gameScore.getLastQuestionAnswered() >= AppConstants.FIRST_MILESTONE &&
-                    gameScore.getLastQuestionAnswered() < AppConstants.SECOND_MILESTONE) {
-                gameScore.setMoneyEnsured(AppConstants.QUESTIONS_VALUE[AppConstants.FIRST_MILESTONE]);
-            } else if (gameScore.getLastQuestionAnswered() >= AppConstants.SECOND_MILESTONE){
-                gameScore.setMoneyEnsured(AppConstants.QUESTIONS_VALUE[AppConstants.SECOND_MILESTONE]);
+            /* if user won the game...*/
+            if (gameScore.getLastQuestionAnswered() == AppConstants.NUMBER_OF_QUESTIONS) {
+                gameScore.setMoneyAchieved(AppConstants.QUESTIONS_VALUE[gameScore.getLastQuestionAnswered()]);
+                gameScore.setMoneyEnsured(gameScore.getMoneyAchieved());
             } else {
-                gameScore.setMoneyEnsured(AppConstants.QUESTIONS_VALUE[0]); // yes: zero :)
+                gameScore.setMoneyAchieved(AppConstants.QUESTIONS_VALUE[gameScore.getLastQuestionAnswered()]);
+                gameScore.setPlayingFor(AppConstants.QUESTIONS_VALUE[gameScore.getLastQuestionAnswered() + 1]);
+                if (gameScore.getLastQuestionAnswered() >= AppConstants.FIRST_MILESTONE &&
+                        gameScore.getLastQuestionAnswered() < AppConstants.SECOND_MILESTONE) {
+                    gameScore.setMoneyEnsured(AppConstants.QUESTIONS_VALUE[AppConstants.FIRST_MILESTONE]);
+                } else if (gameScore.getLastQuestionAnswered() >= AppConstants.SECOND_MILESTONE) {
+                    gameScore.setMoneyEnsured(AppConstants.QUESTIONS_VALUE[AppConstants.SECOND_MILESTONE]);
+                } else {
+                    gameScore.setMoneyEnsured(AppConstants.QUESTIONS_VALUE[0]); // yes: zero :)
+                }
             }
             logging.debug("Refresh game scores final state: " + gameScore.toString());
         }
