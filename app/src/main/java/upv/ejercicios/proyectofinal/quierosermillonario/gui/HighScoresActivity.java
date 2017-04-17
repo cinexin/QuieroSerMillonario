@@ -186,7 +186,7 @@ public class HighScoresActivity extends ActionBarActivity implements OnMapReadyC
                         }
                     }
                 };
-                ModalMessage.ModalYesNoMessage(HighScoresActivity.this, R.string.save_settings_confirmation, yesNoClickListener);
+                ModalMessage.ModalYesNoMessage(HighScoresActivity.this, R.string.delete_high_scores_confirmation, yesNoClickListener);
                 return true;
 
             default:

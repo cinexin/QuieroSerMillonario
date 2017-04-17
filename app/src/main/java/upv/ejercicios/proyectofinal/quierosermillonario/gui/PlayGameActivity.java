@@ -119,19 +119,6 @@ public class PlayGameActivity extends AppCompatActivity {
 
         /* PoC: changing a random button (answer button) */
         this.answersGridView.setAdapter(answerItemAdapter);
-        //this.answersGridView.setBackgroundColor(getResources().getColor(R.color.rightAnswer));
-        View answerView = this.answersGridView.getAdapter().getView(2, findViewById(R.id.rl_answers),this.answersGridView );
-        Button answerButton = (Button) answerView.findViewById(R.id.btn_answer_item);
-        Log.d("[DEBUG]", "AnswerButtonView: " + answerButton);
-        answerButton.setBackgroundColor(getResources().getColor(R.color.wrongAnswer));
-        answerButton.setTextColor(getResources().getColor(R.color.wrongAnswer));
-
-        answerButton.setTag(new String("WRONG"));
-        Log.d("[DEBUG]", "Answer Button Text: " + answerButton.getText());
-
-        answerItemAdapter.notifyDataSetChanged();
-
-
 
         TextView txtPlayingFor = (TextView) findViewById(R.id.txt_playing_for);
         txtPlayingFor.setText(String.valueOf(gameScoresService.getGameScore().getPlayingFor()) );
@@ -140,7 +127,8 @@ public class PlayGameActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Logging logging = new Logging();
-
+                if (view.isEnabled() == false)
+                    return;
                 // check if it's the correct answer
                 int rightAnswer = Integer.valueOf(questionItem.getRight());
                 if ((position + 1) == rightAnswer ) { // right answer :)

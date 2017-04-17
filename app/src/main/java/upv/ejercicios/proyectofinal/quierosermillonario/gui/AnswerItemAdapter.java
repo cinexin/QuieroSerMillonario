@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewParent;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 
@@ -78,7 +79,7 @@ public class AnswerItemAdapter extends BaseAdapter {
     public View getView(final int position, View convertView, ViewGroup parent) {
         View rowView ;
 
-        Log.d("[DEBUG]", "Get View called");
+
         if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             rowView = inflater.inflate(R.layout.answer_item,parent, false);
@@ -114,6 +115,12 @@ public class AnswerItemAdapter extends BaseAdapter {
                 )
             ) {
             answerButton.setAlpha((float) 0.5);
+            answerButton.setFocusableInTouchMode(false);
+            answerButton.setEnabled(false);
+            ViewGroup layout = (ViewGroup) answerButton.getParent();
+            if (layout != null)
+                layout.setEnabled(false);
+
         }
 
 
