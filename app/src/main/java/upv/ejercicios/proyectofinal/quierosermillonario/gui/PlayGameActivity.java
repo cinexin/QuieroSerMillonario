@@ -309,6 +309,7 @@ public class PlayGameActivity extends AppCompatActivity {
                 gameScore.getJokerStatus().setPhoneCallJokerUsed(true);
                 gameScore.getJokerStatus().increaseNumOfJokersUsed();
                 item.setEnabled(false);
+                item.setVisible(false);
                 answerItemAdapter.notifyDataSetChanged();
                 return true;
             case R.id.btn_audience_joker:
@@ -316,6 +317,7 @@ public class PlayGameActivity extends AppCompatActivity {
                 gameScore.getJokerStatus().setAudienceJokerUsed(true);
                 gameScore.getJokerStatus().increaseNumOfJokersUsed();
                 item.setEnabled(false);
+                item.setVisible(false);
                 answerItemAdapter.notifyDataSetChanged();
                 return true;
 
@@ -324,6 +326,7 @@ public class PlayGameActivity extends AppCompatActivity {
                 gameScore.getJokerStatus().setFiftyPercentJokerUsed(true);
                 gameScore.getJokerStatus().increaseNumOfJokersUsed();
                 item.setEnabled(false);
+                item.setVisible(false);
                 answerItemAdapter.notifyDataSetChanged();
                 return true;
 
