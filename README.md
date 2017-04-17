@@ -24,7 +24,7 @@ Installing directly from .apk file:
 3. Notify user when he/she answers incorrectly a question (Game Over and score achieved) [DONE]
 4. Remove jokers on the fly from the menu as long as they're being used [DONE]
 5. Disable appropriate answers when 50% joker is requested [DONE]
-6. Change location icons on "Settings" UI (don't match look'n'feel at all) [TODO]
+6. Change location icons on "Settings" UI (don't match look'n'feel at all) [DONE]
 7. What happens if user actually WINS the game? [TODO]
 8. Test for bigger letters on "Play Game" UI [ TODO ]
 9. Test for more bugs to appear (and MAYBE fix them) [ 2 FIXED ]
