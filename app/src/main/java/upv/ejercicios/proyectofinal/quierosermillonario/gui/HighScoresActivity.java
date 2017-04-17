@@ -1,6 +1,7 @@
 package upv.ejercicios.proyectofinal.quierosermillonario.gui;
 
 
+import android.content.DialogInterface;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.AsyncTask;
@@ -34,6 +35,7 @@ import java.util.List;
 import upv.ejercicios.proyectofinal.quierosermillonario.R;
 import upv.ejercicios.proyectofinal.quierosermillonario.constants.AppConstants;
 import upv.ejercicios.proyectofinal.quierosermillonario.exception.PersistenceException;
+import upv.ejercicios.proyectofinal.quierosermillonario.gui.utils.ModalMessage;
 import upv.ejercicios.proyectofinal.quierosermillonario.model.GameScore;
 import upv.ejercicios.proyectofinal.quierosermillonario.model.GameSettings;
 import upv.ejercicios.proyectofinal.quierosermillonario.model.taskParams.HighScoresTableParams;
@@ -170,7 +172,21 @@ public class HighScoresActivity extends ActionBarActivity implements OnMapReadyC
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.btn_high_scores_delete:
-                clearScores();
+                // ask for user confirmation and clear local scores...
+                DialogInterface.OnClickListener yesNoClickListener = new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which) {
+                            case DialogInterface.BUTTON_POSITIVE:
+                                clearScores();
+                                break;
+                            case DialogInterface.BUTTON_NEGATIVE:
+                                dialog.dismiss();
+                                break;
+                        }
+                    }
+                };
+                ModalMessage.ModalYesNoMessage(HighScoresActivity.this, R.string.save_settings_confirmation, yesNoClickListener);
                 return true;
 
             default:

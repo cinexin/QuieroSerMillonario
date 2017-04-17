@@ -24,6 +24,7 @@
     <string name="lbl_delete_high_scores">Delete high scores</string>
     <string name="lbl_user_high_scores">Your High Scores</string>
     <string name="lbl_friends_high_scores">Your friend\'s High Scores</string>
+    <string name="delete_high_scores_confirmation">Your local scores are going to be removed. Are you sure?</string>
     <string name="lbl_call_joker">Call Joker</string>
     <string name="lbl_fifty_percent_joker">50% Joker</string>
     <string name="lbl_audience_joker">Audience Joker</string>

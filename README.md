@@ -20,7 +20,7 @@ Installing directly from .apk file:
 PENDING TODO's AND IMPROVEMENTS 
 -------------------------------
 1. Ask user for confirmation when settings are saved / changed [DONE]
-2. Ask user for confirmation when local scores are about to be removed [TODO]
+2. Ask user for confirmation when local scores are about to be removed [DONE]
 3. Notify user when he/she answers incorrectly a question (Game Over and score achieved) [TODO]
 4. Remove jokers on the fly from the menu as long as they're being used [TODO]
 5. Disable appropriate answers when 50% joker is requested [TODO]
