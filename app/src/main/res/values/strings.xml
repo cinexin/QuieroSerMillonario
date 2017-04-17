@@ -36,6 +36,7 @@
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="ok">OK</string>
+    <string name="save_settings_confirmation">This will reset any ongoing game. Are you sure?</string>
     <string name="abandon_game_confirmation">Are you sure you want to abandon game? /:)</string>
     <string name="lbl_status">Status...</string>
     <string name="msg_adding_friend">Adding friend...</string>

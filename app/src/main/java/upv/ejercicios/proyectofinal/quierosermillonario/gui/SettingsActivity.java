@@ -23,6 +23,7 @@ import java.io.IOException;
 
 import upv.ejercicios.proyectofinal.quierosermillonario.R;
 import upv.ejercicios.proyectofinal.quierosermillonario.constants.AppConstants;
+import upv.ejercicios.proyectofinal.quierosermillonario.gui.utils.ModalMessage;
 import upv.ejercicios.proyectofinal.quierosermillonario.gui.utils.ToastMessage;
 import upv.ejercicios.proyectofinal.quierosermillonario.interfaces.LoggingInterface;
 import upv.ejercicios.proyectofinal.quierosermillonario.model.Friend;
@@ -145,10 +146,26 @@ public class SettingsActivity extends ActionBarActivity {
         saveSettingsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // DONE: Collect input data and Call GameSettingsService.saveSettings
-                GameSettings gameSettings = collectInputSettings();
-                GameSettingsService gameSettingsService = new GameSettingsService(getApplicationContext());
-                gameSettingsService.saveSettings(gameSettings);
+                DialogInterface.OnClickListener yesNoDialogClickListener = new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which) {
+                            case DialogInterface.BUTTON_POSITIVE:
+                                // DONE: Collect input data and Call GameSettingsService.saveSettings
+                                GameSettings gameSettings = collectInputSettings();
+                                GameSettingsService gameSettingsService = new GameSettingsService(getApplicationContext());
+                                gameSettingsService.saveSettings(gameSettings);
+                                break;
+                            case DialogInterface.BUTTON_NEGATIVE:
+                                dialog.dismiss();
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                };
+                ModalMessage.ModalYesNoMessage(SettingsActivity.this, R.string.save_settings_confirmation, yesNoDialogClickListener);
+
             }
         });
 
