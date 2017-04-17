@@ -250,8 +250,8 @@ public class HighScoresActivity extends ActionBarActivity implements OnMapReadyC
             TableLayout highScoresTable;
 
             highScoresTable = (TableLayout) findViewById(R.id.user_high_scores_table_view);
-
-            displayInTable(highScoresTable, highScoresTableParams.getGameScoreList());
+            if (highScoresTableParams != null)
+                displayInTable(highScoresTable, highScoresTableParams.getGameScoreList());
         }
     }
 
