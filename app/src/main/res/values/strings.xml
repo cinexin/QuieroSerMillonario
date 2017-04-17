@@ -47,4 +47,6 @@
     <string name="msg_high_scores_remote_record_error">There was some error when trying to register your score remotely!</string>
     <string name="lbl_locate_me">Locate me!</string>
     <string name="lbl_stop_locating_me">Stop locating me</string>
+    <string name="msg_you_lose_the_game">Oooohh...incorrect answer. You lost the game... :-(</string>
+    <string name="lbl_score_achieved">Score achieved: </string>
 </resources>

@@ -251,9 +251,24 @@ public class PlayGameActivity extends AppCompatActivity {
 
         if (cause == AppConstants.CONTESTANT_FAILED_QUESTION) {
             if (gameScore != null) {
-                gameScore.setMoneyAchieved(gameScore.getMoneyEnsured());
-                gameScoresService.setGameScore(gameScore);
-                updateScoresAndQuitGame();
+                StringBuffer confirmationMsg = new StringBuffer(getResources().getString(R.string.msg_you_lose_the_game));
+                confirmationMsg.append(" " + getResources().getString(R.string.lbl_score_achieved));
+                confirmationMsg.append(" " + String.valueOf(gameScore.getMoneyEnsured()));
+                DialogInterface.OnClickListener onClickListener = new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which) {
+                            case DialogInterface.BUTTON_POSITIVE:
+                                gameScore.setMoneyAchieved(gameScore.getMoneyEnsured());
+                                gameScoresService.setGameScore(gameScore);
+                                updateScoresAndQuitGame();
+                            default:
+                                break;
+                        }
+                    }
+                };
+                ModalMessage.ModalInfoMessage(PlayGameActivity.this, confirmationMsg.toString(), onClickListener);
+
             }
         }
         else if (cause == AppConstants.CONTESTANT_ABANDONED_GAME) {

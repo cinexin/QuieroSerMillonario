@@ -36,31 +36,28 @@ public class ModalMessage {
         alertDialogBuilder.show();
     }
 
+    private static void showModalInfoDialog(Context context, String msg, DialogInterface.OnClickListener onClickListener) {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
+        alertDialogBuilder.setMessage(msg);
+
+        alertDialogBuilder.setPositiveButton(context.getResources().getString(R.string.ok), onClickListener);
+        alertDialogBuilder.show();
+    }
     /*
          Context = application context from which you're calling constructor
          questionMsgKey = the KEY of the message you want to display (as it's on res/strings.xml) (NOT THE MESSAGE ITSELF!!)
       */
-    public static void ModalInfoMessage(Context context, int msgKey) {
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
+    public static void ModalInfoMessage(Context context, int msgKey, DialogInterface.OnClickListener onClickListener) {
+
         String msg = context.getResources().getString(msgKey);
         if (StringUtils.isEmpty(msg))
             msg = AppConstants.DEFAULT_YES_NO_MSG;
 
-        alertDialogBuilder.setMessage(msg);
-        Dialog.OnClickListener onClickListener  = new Dialog.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                switch (which) {
-                    case DialogInterface.BUTTON_POSITIVE:
-                        dialog.dismiss();
-                        break;
-                    default:
-                        break;
-                }
-            }
-        };
-        alertDialogBuilder.setPositiveButton(context.getResources().getString(R.string.ok), onClickListener);
-        alertDialogBuilder.show();
+        showModalInfoDialog(context, msg, onClickListener);
+    }
+
+    public static void ModalInfoMessage(Context context, String msg, DialogInterface.OnClickListener onClickListener) {
+        showModalInfoDialog(context, msg, onClickListener);
     }
 
 }

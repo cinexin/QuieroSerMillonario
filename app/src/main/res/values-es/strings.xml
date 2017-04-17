@@ -37,4 +37,6 @@
     <string name="msg_high_scores_remote_record_error">¡Hubo un error al tratar de registrar tu puntuación remotamente!</string>
     <string name="lbl_locate_me">¡Localízame!</string>
     <string name="lbl_stop_locating_me">Para la localización</string>
+    <string name="msg_you_lose_the_game">Oooohh...respuesta incorrecta. Perdiste el juego... :-(</string>
+    <string name="lbl_score_achieved">Puntuación conseguida: </string>
 </resources>
