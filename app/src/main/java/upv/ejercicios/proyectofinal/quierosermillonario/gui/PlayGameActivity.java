@@ -17,14 +17,13 @@ import android.widget.TextView;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
 import upv.ejercicios.proyectofinal.quierosermillonario.R;
 import upv.ejercicios.proyectofinal.quierosermillonario.constants.AppConstants;
 import upv.ejercicios.proyectofinal.quierosermillonario.exception.PersistenceException;
-import upv.ejercicios.proyectofinal.quierosermillonario.gui.utils.ModalYesNoMessage;
+import upv.ejercicios.proyectofinal.quierosermillonario.gui.utils.ModalMessage;
 import upv.ejercicios.proyectofinal.quierosermillonario.gui.utils.ToastMessage;
 import upv.ejercicios.proyectofinal.quierosermillonario.model.AnswerSet;
 import upv.ejercicios.proyectofinal.quierosermillonario.model.GameScore;
@@ -276,9 +275,9 @@ public class PlayGameActivity extends AppCompatActivity {
                 }
             };
 
-            ModalYesNoMessage modalMsg = new ModalYesNoMessage(PlayGameActivity.this, R.string.abandon_game_confirmation, yesNoDialogClickListener);
+            // TODO: Change the call to adapt to refactored class
+            ModalMessage.ModalYesNoMessage(PlayGameActivity.this, R.string.abandon_game_confirmation, yesNoDialogClickListener);
 
-            modalMsg.show();
         }
 
 

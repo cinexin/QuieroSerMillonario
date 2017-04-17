@@ -201,9 +201,11 @@ public class GameScoresService {
             JSONObject jsonObject = new JSONObject(response);
             HighScoreList highScoreList = gson.fromJson(jsonObject.toString(), HighScoreList.class);
             List<HighScoreRecord> jsonHighScores = highScoreList.getScores();
-            Collections.sort(jsonHighScores);
-            gameScores = fromHighScoreJSONListToGameScoreList(jsonHighScores);
-            Collections.reverse(gameScores); // we want descending order to be displayed
+            if (jsonHighScores != null) {
+                Collections.sort(jsonHighScores);
+                gameScores = fromHighScoreJSONListToGameScoreList(jsonHighScores);
+                Collections.reverse(gameScores); // we want descending order to be displayed
+            }
         } catch (IOException ioEx) {
             logging.error(this.getClass().getName() + ". I/O Exception: " + ioEx.getMessage());
             throw ioEx;
