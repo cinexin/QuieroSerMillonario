@@ -28,6 +28,5 @@ Installing directly from .apk file:
 7. What happens if user actually WINS the game? [DONE]
 8. Test for bigger letters on "Play Game" UI [ TODO ]
 9. Test for more bugs to appear (and MAYBE fix them) [ 2 FIXED ]
-10. Change the icon in the map (Friend's scores tab) to show a cup icon for the best score [TODO]
+10. Change the icon in the map (Friend's scores tab) to show a cup icon for the best score [DONE]
 11. Notify user when he/she answers correctly a question indicating the score achieved too [TODO]
-

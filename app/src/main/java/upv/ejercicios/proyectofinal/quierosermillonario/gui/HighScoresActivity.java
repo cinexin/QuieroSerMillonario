@@ -23,6 +23,8 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
@@ -284,12 +286,33 @@ public class HighScoresActivity extends ActionBarActivity implements OnMapReadyC
             super.onPostExecute(gameScores);
             if (gameScores != null) {
                 /* DONE: Position scores markers in the GMap */
-                for (GameScore gameScore:gameScores) {
+                for (int i = 0; i<gameScores.size();i++) {
+                    GameScore gameScore = gameScores.get(i);
                     MarkerOptions markerOptions = new MarkerOptions();
                     LatLng locationLatLng = new LatLng(Double.valueOf(gameScore.getLatitude()), Double.valueOf(gameScore.getLongitude()));
                     markerOptions.position(locationLatLng);
                     markerOptions.title(gameScore.getUserName());
                     markerOptions.snippet(String.valueOf(gameScore.getMoneyAchieved()));
+                    /*
+                        Display as "podium"
+                     */
+                    switch (i) {
+                        case 0:
+                            markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_first));
+                            break;
+
+                        case 1:
+                            markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_second));
+                            break;
+
+                        case 2:
+                            markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_third));
+                            break;
+
+                        default:
+                            break;
+                    }
+
                     googleMap.addMarker(markerOptions);
 
 
